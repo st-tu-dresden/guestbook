@@ -1,0 +1,48 @@
+# A Sample Java Web-Application
+
+Purpose of this sample project is to make students familiar with basic technologies they're going to use during the Software Engineering Lab at Technical University of Dresden.
+
+## Quickstart
+
+[source, shell]
+----
+$ git clone https://github.com/st-tu-dresden/guestbook
+$ cd guestbook
+$ mvn clean package
+$ mvn spring-boot:run
+----
+
+After that point your browser to `http://localhost:8080`.
+
+## Technology stack
+
+This sample application is build on top of the following technologies:
+
+### Spring Boot
+
+Rapid application development framework based on Spring (see below).
+
+- http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle[Reference documentation]
+- https://spring.io/guides[Getting started guides]
+- http://projects.spring.io/spring-boot[Project home]
+
+### Spring 4
+
+The de-facto standard Java application framework.
+
+- https://spring.io/guides[Getting started guides]
+- http://projects.spring.io/spring-framework[Project home]
+
+### Spring Data JPA
+
+Spring module to easily build data acess layers using JPA 2.1 (Java Persistence API).
+
+- https://spring.io/guides?filter=jpa[Getting started guides]
+- http://projects.spring.io/spring-data-jpa[Project home]
+
+### Thymeleaf
+
+Library to build HTML web views using natural templating.
+
+- https://spring.io/guides/gs/serving-web-content[Getting stared guide]
+- http://www.thymeleaf.org/doc/usingthymeleaf.html[Tutorial]
