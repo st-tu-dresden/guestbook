@@ -4,6 +4,8 @@ Purpose of this sample project is to make students familiar with basic technolog
 
 ## Quickstart
 
+NOTE: The Quickstart requires Java 8, Maven 3 and a recent Git (2.0.x preferred) to be available on your machine. If you miss any of those go through the steps described in <<prerequisites>>
+
 [source, shell]
 ----
 $ git clone https://github.com/st-tu-dresden/guestbook
@@ -13,6 +15,53 @@ $ mvn spring-boot:run
 ----
 
 After that point your browser to `http://localhost:8080`.
+
+## Prerequisites
+
+### Java 8
+
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Download] the binaries, install. Make sure the console shows something like this:
+
+[source, bash]
+----
+$ java -version
+java version "1.8.0_20-ea"
+Java(TM) SE Runtime Environment (build 1.8.0_20-ea-b22)
+Java HotSpot(TM) 64-Bit Server VM (build 25.20-b21, mixed mode)
+----
+
+### Maven 3.x
+
+http://maven.apache.org/download.cgi[Download] the binaries, unzip to an arbitrary location and make sure the `bin` folder of the unzipped result is in your path:
+
+[source, bash]
+----
+$ mvn --version
+Apache Maven 3.1.1 (0728685237757ffbf44136acec0402957f723d9a; 2013-09-17 17:22:22+0200)
+Maven home: /Applications/Tools/maven-3
+Java version: 1.8.0_20-ea, vendor: Oracle Corporation
+Java home: /Library/Java/JavaVirtualMachines/jdk1.8.0_20.jdk/Contents/Home/jre
+Default locale: de_DE, platform encoding: UTF-8
+OS name: "mac os x", version: "10.9.4", arch: "x86_64", family: "mac"
+----
+
+### Git
+
+http://git-scm.com/download[Download] the binaries, run the installer. Verify the command line shows something like this after install:
+
+[source, bash]
+----
+$ git --version
+git version 1.8.5.2 (Apple Git-48)
+----
+
+## IDE Setup
+
+Grab the latest https://spring.io/tools/sts/all[STS] (Spring Tool Suite, plain Eclipse Luna or IntelliJ should work as well), run installer or unzip and run it.
+
+Select menu:File[Import], select menu:Maven[Existing Maven Projects], select the folder you checked the project out into and hit btn:[Finish]. This will import the project into your workspace.
+
+In the Console view you might wanna click the btn:[Open Console] button and select Maven Console to see that Maven is downloading dependencies, sources and Javadocs.
 
 ## Technology stack
 
