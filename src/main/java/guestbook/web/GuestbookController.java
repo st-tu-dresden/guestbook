@@ -45,13 +45,13 @@ public class GuestbookController {
 	public String addEntry(@RequestParam("name") String name, @RequestParam("text") String text) {
 
 		guestbook.save(new GuestbookEntry(name, text));
-		return "redirect:/guestbook";
+		return "redirect:/guestbook/";
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String removeEntry(@PathVariable Long id) {
 		guestbook.delete(id);
-		return "redirect:/guestbook";
+		return "redirect:/guestbook/";
 	}
 
 	// ‎(｡◕‿◕｡)
