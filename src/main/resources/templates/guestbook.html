@@ -1,39 +1,40 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
 		<title th:text="#{guestbook.title}">Gästebuch</title>
 	</head>
 	<body>
-		<h1 th:text="#{guestbook.title}">Gästebuch</h1>
+		<h1 class="text-center" th:text="#{guestbook.title}">Gästebuch</h1>
 	
-		<div class="entries" th:each="entry,iterStat : ${guestbookEntries}">
-				<div class="entry">
+		<div class="entries center-block" th:each="entry,iterStat : ${guestbookEntries}">
+				<div class="gb-entry gb-border">
 					<form th:method="delete" th:action="${entry.id}">
-						<button class="delBtn">x</button>
+						<button class="btn btn-default pull-right"><span class="glyphicon glyphicon-remove"></span></button>
 					</form>
 					<h2 th:text="${iterStat.count} + '. ' + ${entry.name}">1. Posting</h2>
-					<p class="entrytext" th:text="${entry.text}"></p>
-					<p class="date" th:text="${#dates.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</p>
-	
+					<blockquote class="entrytext" th:text="${entry.text}"></blockquote>
+					<footer class="date" th:text="${#dates.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
 				</div>
 		</div>
 	
-		<div class="login"> 
-			<form id="form" method="post"> 
-				<fieldset> 
-					<legend th:text="#{guestbook.form.title}">Titel</legend> 
+		<form method="post" role="form" class="gb-form gb-border">
+			  <div class="form-group">
 					<label for="name" th:text="#{guestbook.form.name}">Name</label><br /> 
-					<input name="name" id="name" type="text" /><br /> 
+					<input name="name" id="name" class="form-control" type="text" /><br /> 
+			  </div>
+			  <div class="form-group">
 					<label for="text" th:text="#{guestbook.form.text}">Text</label><br /> 
-					<textarea name="text" id="text"></textarea><br /> 
-					<input type="submit" class="btn" th:value="#{guestbook.form.submit}" value="Senden" />
-				</fieldset> 
-			</form> 
-		</div>
-	
-		<p class="center">
+					<textarea name="text" id="text" class="form-control"></textarea><br /> 
+			  </div>
+			  <input type="submit" class="btn btn-default" th:value="#{guestbook.form.submit}" value="Senden" />
+		</form>
+
+
+		<p class="text-center">
 			<a href="/" th:text="#{guestbook.back}">Zurück</a>
 		</p>
 	</body>
