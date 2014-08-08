@@ -48,7 +48,9 @@ class AjaxGuestbookController {
 	public HttpEntity<GuestbookEntry> addEntry(@RequestParam("name") String name, //
 			@RequestParam("text") String text) {
 
-		return new ResponseEntity<>(new GuestbookEntry(name, text), HttpStatus.OK);
+		GuestbookEntry entry = guestbook.save(new GuestbookEntry(name, text));
+
+		return new ResponseEntity<>(entry, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
