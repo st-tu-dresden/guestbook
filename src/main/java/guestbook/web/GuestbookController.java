@@ -5,7 +5,7 @@ import guestbook.GuestbookEntry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,7 +57,7 @@ public class GuestbookController {
 	// ‎(｡◕‿◕｡)
 	// @ModelAttribute sorgt dafür, dass bei _jedem_ Controlleraufruf die Variable guestbookEntries im Html genutzt werden
 	// kann
-	// Der Wert wird in eine ModelMap abgelegt und ist damit aus dem View abrufbar.
+	// Der Wert wird in ein Model abgelegt und ist damit aus dem View abrufbar.
 	@ModelAttribute("guestbookEntries")
 	private Iterable<GuestbookEntry> getEntries() {
 		return guestbook.findAll();
@@ -65,12 +65,12 @@ public class GuestbookController {
 
 	// ‎(｡◕‿◕｡)
 	// Benötigt man einen Wert nicht bei jedem Aufruf sondern nur bei einem ganz bestimmten
-	// oder ist der Wert von anderen Requestparameter abhängig, so ist es sinnvoll die ModelMap selber zu füllen
+	// oder ist der Wert von anderen Requestparameter abhängig, so ist es sinnvoll das Model selber zu füllen
 	// Dazu reicht es diese in die Parameterliste aufzunehmen, Spring kümmert sich darum diese zu übergeben.
 	// Btw, es sind noch viel mehr Parameter möglich, welche von Spring übergeben werden können, siehe:
 	// http://docs.spring.io/spring/docs/3.2.x/javadoc-api/org/springframework/web/bind/annotation/RequestMapping.html
-	public String dummy(ModelMap modelMap) {
-		modelMap.addAttribute("variable", 1337);
+	public String dummy(Model model) {
+		model.addAttribute("variable", 1337);
 		return "guestbook";
 	}
 }

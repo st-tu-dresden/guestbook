@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 // allerdings etwas modifiziert um über Javascript mit der Anwendung zu kommunizieren.
 // Das Beispiel ist mit Hilfe von http://blog.springsource.com/2010/01/25/ajax-simplifications-in-spring-3-0/ entstanden.
 
+
 @Controller
 @RequestMapping("/ajaxbook")
 class AjaxGuestbookController {
