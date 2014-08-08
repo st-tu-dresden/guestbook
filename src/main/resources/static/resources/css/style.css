@@ -5,7 +5,7 @@
 	border-radius: 4px;	
 }
 
-div.entries {
+div#entries {
 	margin: auto;
 	width: 50%;
 }
