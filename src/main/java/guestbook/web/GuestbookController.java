@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 // Wie hier zu sehen ist, kann man die @RequestMapping auch an einen Controller hängen.
 
 @Controller
-@RequestMapping("/guestbook")
 public class GuestbookController {
+
+	private static final String IS_AJAX_HEADER = "X-Requested-With=XMLHttpRequest";
 
 	private final Guestbook guestbook;
 
@@ -29,7 +30,12 @@ public class GuestbookController {
 		this.guestbook = guestbook;
 	}
 
-	@RequestMapping
+	@RequestMapping("/")
+	public String index() {
+		return "redirect:/guestbook";
+	}
+
+	@RequestMapping(value = "/guestbook", method = RequestMethod.GET)
 	public String guestBook() {
 		return "guestbook";
 	}
@@ -41,24 +47,40 @@ public class GuestbookController {
 
 	// Auf Validierung, z.B. leerer Name oder Text wurde an der Stelle verzichtet.
 	// Spring bietet hierfür aber auch Support, sehen wir im Videoshop.
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "/guestbook", method = RequestMethod.POST)
 	public String addEntry(@RequestParam("name") String name, @RequestParam("text") String text) {
 
 		guestbook.save(new GuestbookEntry(name, text));
-		return "redirect:/guestbook/";
+		return "redirect:/guestbook";
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	/**
+	 * Handles AJAX requests to create a new {@link GuestbookEntry}.
+	 * 
+	 * @param name
+	 * @param text
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/guestbook", method = RequestMethod.POST, headers = IS_AJAX_HEADER)
+	String addEntry(@RequestParam("name") String name, @RequestParam("text") String text, Model model) {
+
+		model.addAttribute("entry", guestbook.save(new GuestbookEntry(name, text)));
+		model.addAttribute("index", guestbook.count());
+		return "guestbook :: entry";
+	}
+
+	@RequestMapping(value = "/guestbook/{id}", method = RequestMethod.DELETE)
 	public String removeEntry(@PathVariable Long id) {
 		guestbook.delete(id);
-		return "redirect:/guestbook/";
+		return "redirect:/guestbook";
 	}
 
 	// ‎(｡◕‿◕｡)
 	// @ModelAttribute sorgt dafür, dass bei _jedem_ Controlleraufruf die Variable guestbookEntries im Html genutzt werden
 	// kann
 	// Der Wert wird in ein Model abgelegt und ist damit aus dem View abrufbar.
-	@ModelAttribute("guestbookEntries")
+	@ModelAttribute("entries")
 	private Iterable<GuestbookEntry> getEntries() {
 		return guestbook.findAll();
 	}

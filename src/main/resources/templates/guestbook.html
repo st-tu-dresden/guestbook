@@ -4,24 +4,28 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
+		<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script th:src="@{/resources/js/guestbook.js}"></script>
 		<link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
 		<title th:text="#{guestbook.title}">Gästebuch</title>
 	</head>
 	<body>
 		<h1 class="text-center" th:text="#{guestbook.title}">Gästebuch</h1>
 	
-		<div class="entries center-block" th:each="entry,iterStat : ${guestbookEntries}">
-				<div class="gb-entry gb-border">
-					<form th:method="delete" th:action="${entry.id}">
+		<div id="entries" class="center-block">
+			<div th:each="entry, it : ${entries}" th:with="index = ${it.count}">
+				<div class="gb-entry gb-border" th:fragment="entry">
+					<form th:method="delete" th:action="@{/guestbook/} + ${entry.id}">
 						<button class="btn btn-default pull-right"><span class="glyphicon glyphicon-remove"></span></button>
 					</form>
-					<h2 th:text="${iterStat.count} + '. ' + ${entry.name}">1. Posting</h2>
+					<h2 th:text="${index} + '. ' + ${entry.name}">1. Posting</h2>
 					<blockquote class="entrytext" th:text="${entry.text}"></blockquote>
 					<footer class="date" th:text="${#dates.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
 				</div>
+			</div>
 		</div>
 	
-		<form method="post" role="form" class="gb-form gb-border">
+		<form method="post" role="form" class="gb-form gb-border" id="form" th:action="@{/guestbook}">
 			  <div class="form-group">
 					<label for="name" th:text="#{guestbook.form.name}">Name</label><br /> 
 					<input name="name" id="name" class="form-control" type="text" /><br /> 

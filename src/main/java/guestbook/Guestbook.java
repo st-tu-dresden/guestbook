@@ -33,4 +33,6 @@ public interface Guestbook extends Repository<GuestbookEntry, Long> {
 	Optional<GuestbookEntry> findOne(Long id);
 
 	Iterable<GuestbookEntry> findAll();
+
+	int count();
 }
