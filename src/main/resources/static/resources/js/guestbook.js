@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	'use strict';
 	
 	$('#form').submit(function(e) {
 
