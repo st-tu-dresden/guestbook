@@ -1,9 +1,14 @@
 package guestbook.web;
 
+import java.util.Optional;
+
 import guestbook.Guestbook;
 import guestbook.GuestbookEntry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -63,17 +68,27 @@ public class GuestbookController {
 	 * @return
 	 */
 	@RequestMapping(value = "/guestbook", method = RequestMethod.POST, headers = IS_AJAX_HEADER)
-	String addEntry(@RequestParam("name") String name, @RequestParam("text") String text, Model model) {
+	public String addEntry(@RequestParam("name") String name, @RequestParam("text") String text, Model model) {
 
 		model.addAttribute("entry", guestbook.save(new GuestbookEntry(name, text)));
 		model.addAttribute("index", guestbook.count());
 		return "guestbook :: entry";
 	}
 
-	@RequestMapping(value = "/guestbook/{id}", method = RequestMethod.DELETE)
-	public String removeEntry(@PathVariable Long id) {
+	@RequestMapping(value = "/guestbook", method = RequestMethod.DELETE)
+	public String removeEntry(@RequestParam("id") Long id) {
 		guestbook.delete(id);
 		return "redirect:/guestbook";
+	}
+	
+	@RequestMapping(value = "/guestbook", method = RequestMethod.DELETE, headers = IS_AJAX_HEADER)
+	public HttpEntity<Boolean> removeEntryJS(@RequestParam("id") Long id) {
+		
+		Optional<GuestbookEntry> entry = guestbook.findOne(id);
+		guestbook.delete(id);
+
+		return entry.map(e -> new ResponseEntity<>(true, HttpStatus.OK)).//
+				orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 	// ‎(｡◕‿◕｡)

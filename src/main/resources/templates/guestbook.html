@@ -12,20 +12,33 @@
 	<body>
 		<h1 class="text-center" th:text="#{guestbook.title}">Gästebuch</h1>
 	
-		<div id="entries" class="center-block">
+		<div class="checkbox text-center">
+	    	<input type="checkbox" id="use_ajax" />
+	    	<label for="use_ajax">Ajax nutzen</label>
+	  	</div>
+
+		<div id="entries">			
 			<div th:each="entry, it : ${entries}" th:with="index = ${it.count}">
-				<div class="gb-entry gb-border" th:fragment="entry">
-					<form th:method="delete" th:action="@{/guestbook/} + ${entry.id}">
-						<button class="btn btn-default pull-right"><span class="glyphicon glyphicon-remove"></span></button>
-					</form>
-					<h2 th:text="${index} + '. ' + ${entry.name}">1. Posting</h2>
-					<blockquote class="entrytext" th:text="${entry.text}"></blockquote>
-					<footer class="date" th:text="${#dates.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
+				<div class="panel panel-default" th:fragment="entry" th:id="entry+${entry.id}">
+					<div class="panel-heading" >
+						<form th:method="delete" th:action="@{/guestbook}" th:attr="data-entry-id=${entry.id}">
+							<input type="hidden" name="id" th:value="${entry.id}" value="0" />
+							<button class="btn btn-default pull-right" >
+								<span class="glyphicon glyphicon-remove"></span>
+							</button>
+						</form>
+						<h3 th:text="${index} + '. ' + ${entry.name}">1. Posting</h3>
+					</div>
+					<div class="panel-body">
+						<blockquote class="entrytext" th:text="${entry.text}"></blockquote>
+						<footer class="date" th:text="${#dates.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
+					</div>
 				</div>
 			</div>
 		</div>
+
 	
-		<form method="post" role="form" class="gb-form gb-border" id="form" th:action="@{/guestbook}">
+		<form method="post" role="form" class="gb-form" id="form" th:action="@{/guestbook}">
 			  <div class="form-group">
 					<label for="name" th:text="#{guestbook.form.name}">Name</label><br /> 
 					<input name="name" id="name" class="form-control" type="text" /><br /> 
@@ -37,9 +50,5 @@
 			  <input type="submit" class="btn btn-default" th:value="#{guestbook.form.submit}" value="Senden" />
 		</form>
 
-
-		<p class="text-center">
-			<a href="/" th:text="#{guestbook.back}">Zurück</a>
-		</p>
 	</body>
 </html>
