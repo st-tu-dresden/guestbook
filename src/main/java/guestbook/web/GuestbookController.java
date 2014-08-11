@@ -1,9 +1,9 @@
 package guestbook.web;
 
-import java.util.Optional;
-
 import guestbook.Guestbook;
 import guestbook.GuestbookEntry;
+
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -75,20 +75,42 @@ public class GuestbookController {
 		return "guestbook :: entry";
 	}
 
-	@RequestMapping(value = "/guestbook", method = RequestMethod.DELETE)
-	public String removeEntry(@RequestParam("id") Long id) {
+	/**
+	 * Deletes a {@link GuestbookEntry}.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/guestbook/{id}", method = RequestMethod.DELETE)
+	public String removeEntry(@PathVariable Long id) {
 		guestbook.delete(id);
 		return "redirect:/guestbook";
 	}
-	
-	@RequestMapping(value = "/guestbook", method = RequestMethod.DELETE, headers = IS_AJAX_HEADER)
-	public HttpEntity<Boolean> removeEntryJS(@RequestParam("id") Long id) {
-		
-		Optional<GuestbookEntry> entry = guestbook.findOne(id);
-		guestbook.delete(id);
 
-		return entry.map(e -> new ResponseEntity<>(true, HttpStatus.OK)).//
-				orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	/**
+	 * Handles AJAX requests to delete {@link GuestbookEntry}s.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/guestbook/{id}", method = RequestMethod.DELETE, headers = IS_AJAX_HEADER)
+	public HttpEntity<?> removeEntryJS(@PathVariable Long id) {
+
+		Optional<GuestbookEntry> entry = guestbook.findOne(id);
+
+		if (!entry.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+		guestbook.delete(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+
+		// Java 8 style use of Optional, less readable in this case.
+
+		// return entry.map(e -> {
+		// guestbook.delete(id);
+		// return new ResponseEntity<>(HttpStatus.OK);
+		// }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 	// ‎(｡◕‿◕｡)
