@@ -38,7 +38,7 @@ $(document).ready(function() {
 			cache	: false,
 			url		: form.attr('action'),
 			data	: form.serialize(),
-			success	: function(success) {
+			success	: function() {
 				$('#entry' + id).slideUp(500, function() {
 					$(this).remove();
 				});
