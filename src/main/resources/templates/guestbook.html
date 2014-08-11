@@ -21,8 +21,7 @@
 			<div th:each="entry, it : ${entries}" th:with="index = ${it.count}">
 				<div class="panel panel-default" th:fragment="entry" th:id="entry+${entry.id}">
 					<div class="panel-heading" >
-						<form th:method="delete" th:action="@{/guestbook}" th:attr="data-entry-id=${entry.id}">
-							<input type="hidden" name="id" th:value="${entry.id}" value="0" />
+						<form th:method="delete" th:action="@{/guestbook/} + ${entry.id}" th:attr="data-entry-id=${entry.id}">
 							<button class="btn btn-default pull-right" >
 								<span class="glyphicon glyphicon-remove"></span>
 							</button>
