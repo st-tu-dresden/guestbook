@@ -27,12 +27,17 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
+ * Integration tests for {@link Guestbook}.
+ * <p>
+ * Bootstraps the application using the {@link Application} configuration class. Enables transaction rollbacks after
+ * test methods using the {@link Transactional} annotation.
+ * 
  * @author Oliver Gierke
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @Transactional
-public class GuestbookRepositoryIntegrationTest {
+public class GuestbookIntegrationTest {
 
 	@Autowired Guestbook repository;
 

@@ -21,18 +21,49 @@ import org.springframework.data.repository.Repository;
 import org.springframework.stereotype.Component;
 
 /**
+ * A repository to manage {@link GuestbookEntry} instances. The methods are dynamically implemented by Spring Data JPA.
+ * 
  * @author Oliver Gierke
+ * @see http://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks_of_DDD
+ * @see http://projects.spring.io/spring-data-jpa/
  */
 @Component("guestbookRepository")
 public interface Guestbook extends Repository<GuestbookEntry, Long> {
 
+	/**
+	 * Deletes the {@link GuestbookEntry} with the given id.
+	 * 
+	 * @param id must not be {@literal null}.
+	 */
 	void delete(Long id);
 
+	/**
+	 * Saves the given {@link GuestbookEntry}.
+	 * 
+	 * @param entry the entry to save, must not be {@literal null}.
+	 * @return the saved {@link GuestbookEntry}.
+	 */
 	GuestbookEntry save(GuestbookEntry entry);
 
+	/**
+	 * Returns the {@link GuestbookEntry} with the given id, if it exists, {@link Optional#empty()} otherwise.
+	 * 
+	 * @param id must not be {@literal null}.
+	 * @return
+	 */
 	Optional<GuestbookEntry> findOne(Long id);
 
+	/**
+	 * Returns all {@link GuestbookEntry}s available.
+	 * 
+	 * @return
+	 */
 	Iterable<GuestbookEntry> findAll();
 
+	/**
+	 * Returns the number of {@link GuestbookEntry}s available.
+	 * 
+	 * @return
+	 */
 	int count();
 }
