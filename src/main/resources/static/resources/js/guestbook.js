@@ -16,7 +16,14 @@ $(document).ready(function() {
 			url		: form.attr('action'),
 			data	: form.serialize(),
 			success	: function(data) {
-				$("#entries").append(data);
+				$("#entries").append('<div>' + data + '</div>');
+				
+				// fix index
+				var index = $('#entries div[id^="entry"]').length;
+				
+				var textArray = $(data).find('h3').text().split('.', 2);
+				$('#entries div[id^="entry"]:last').find('h3').text(index + '.' + textArray[1]);
+
 				$('html, body').animate({scrollTop: form.offset().top}, 2000);
 				e.target.reset();
 			}
@@ -40,7 +47,12 @@ $(document).ready(function() {
 			data	: form.serialize(),
 			success	: function() {
 				$('#entry' + id).slideUp(500, function() {
-					$(this).remove();
+					var followingEntries = $(this).parent().nextAll().each(function() {
+						var textArray = $(this).find('h3').text().split('.', 2);
+						$(this).find('h3').text((parseInt(textArray[0],10)-1) + '.' + textArray[1]);
+					});
+					
+					$(this).parent().remove();
 				});
 			}
 		});
