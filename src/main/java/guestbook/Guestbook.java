@@ -18,7 +18,6 @@ package guestbook;
 import java.util.Optional;
 
 import org.springframework.data.repository.Repository;
-import org.springframework.stereotype.Component;
 
 /**
  * A repository to manage {@link GuestbookEntry} instances. The methods are dynamically implemented by Spring Data JPA.
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Component;
  * @see http://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks_of_DDD
  * @see http://projects.spring.io/spring-data-jpa/
  */
-@Component("guestbookRepository")
 public interface Guestbook extends Repository<GuestbookEntry, Long> {
 
 	/**

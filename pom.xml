@@ -14,6 +14,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<thymeleaf.version>2.1.4.RELEASE</thymeleaf.version>
 	</properties>
 
 	<dependencies>
