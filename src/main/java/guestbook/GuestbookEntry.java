@@ -34,8 +34,8 @@ import org.springframework.util.Assert;
 public class GuestbookEntry {
 
 	private @Id @GeneratedValue Long id;
-	private String name, text;
-	private Date date;
+	private final String name, text;
+	private final Date date;
 
 	/**
 	 * Creates a new {@link GuestbookEntry} for the given name and text.
@@ -53,7 +53,11 @@ public class GuestbookEntry {
 		this.date = new Date();
 	}
 
-	GuestbookEntry() {}
+	GuestbookEntry() {
+		this.name = null;
+		this.text = null;
+		this.date = null;
+	}
 
 	public String getName() {
 		return name;
