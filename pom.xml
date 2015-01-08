@@ -9,12 +9,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.0.RELEASE</version>
+		<version>1.2.1.RELEASE</version>
 	</parent>
 
 	<properties>
 		<java.version>1.8</java.version>
-		<thymeleaf.version>2.1.4.RELEASE</thymeleaf.version>
 	</properties>
 
 	<dependencies>
