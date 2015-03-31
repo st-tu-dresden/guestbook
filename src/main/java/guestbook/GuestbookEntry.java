@@ -53,7 +53,8 @@ public class GuestbookEntry {
 		this.date = new Date();
 	}
 
-	GuestbookEntry() {
+	@SuppressWarnings("unused")
+	private GuestbookEntry() {
 		this.name = null;
 		this.text = null;
 		this.date = null;

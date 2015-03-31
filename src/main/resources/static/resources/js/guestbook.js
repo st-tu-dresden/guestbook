@@ -6,6 +6,7 @@ $(document).ready(function() {
 		if(!$('#use_ajax').is(':checked')) {
 			return;
 		}
+		
 		e.preventDefault();
 		
 		var form = $(this);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2015 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package guestbook.web;
 import guestbook.Guestbook;
 import guestbook.GuestbookEntry;
 
-import java.util.Optional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -27,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -78,9 +79,11 @@ public class GuestbookController {
 	 * @return
 	 */
 	@RequestMapping(value = "/guestbook", method = RequestMethod.GET)
-	public String guestBook(Model model) {
+	public String guestBook(Model model, GuestbookForm form) {
 
 		model.addAttribute("entries", guestbook.findAll());
+		model.addAttribute("form", form);
+
 		return "guestbook";
 	}
 
@@ -97,9 +100,13 @@ public class GuestbookController {
 	 * @return
 	 */
 	@RequestMapping(value = "/guestbook", method = RequestMethod.POST)
-	public String addEntry(@RequestParam("name") String name, @RequestParam("text") String text) {
+	public String addEntry(@Valid GuestbookForm form, Errors errors, Model model) {
 
-		guestbook.save(new GuestbookEntry(name, text));
+		if (errors.hasErrors()) {
+			return guestBook(model, form);
+		}
+
+		guestbook.save(new GuestbookEntry(form.getName(), form.getText()));
 		return "redirect:/guestbook";
 	}
 
@@ -113,9 +120,9 @@ public class GuestbookController {
 	 * @see #addEntry(String, String)
 	 */
 	@RequestMapping(value = "/guestbook", method = RequestMethod.POST, headers = IS_AJAX_HEADER)
-	public String addEntry(@RequestParam("name") String name, @RequestParam("text") String text, Model model) {
+	public String addEntry(@Valid GuestbookForm form, Model model) {
 
-		model.addAttribute("entry", guestbook.save(new GuestbookEntry(name, text)));
+		model.addAttribute("entry", guestbook.save(new GuestbookEntry(form.getName(), form.getText())));
 		model.addAttribute("index", guestbook.count());
 		return "guestbook :: entry";
 	}
@@ -142,20 +149,9 @@ public class GuestbookController {
 	@RequestMapping(value = "/guestbook/{id}", method = RequestMethod.DELETE, headers = IS_AJAX_HEADER)
 	public HttpEntity<?> removeEntryJS(@PathVariable Long id) {
 
-		Optional<GuestbookEntry> entry = guestbook.findOne(id);
-
-		if (!entry.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		guestbook.delete(id);
-		return new ResponseEntity<>(HttpStatus.OK);
-
-		// Java 8 style use of Optional, less readable in this case.
-
-		// return entry.map(e -> {
-		// guestbook.delete(id);
-		// return new ResponseEntity<>(HttpStatus.OK);
-		// }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+		return guestbook.findOne(id).map(e -> {
+			guestbook.delete(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 }
