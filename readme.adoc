@@ -1,4 +1,5 @@
 # A Sample Java Web-Application
+:experimental:
 
 image:https://travis-ci.org/st-tu-dresden/guestbook.svg?branch=master["Build Status", link="https://travis-ci.org/st-tu-dresden/guestbook"]
 
