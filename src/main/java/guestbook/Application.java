@@ -20,8 +20,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * The core class to bootstrap our application. It trigger the auto-configuration of the Spring Container (see
@@ -32,9 +32,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Paul Henke
  * @author Oliver Gierke
  */
-@Configuration
-@ComponentScan
-@EnableAutoConfiguration
+@SpringBootApplication
 public class Application {
 
 	/**
