@@ -22,7 +22,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Oliver Gierke
  */
 @Controller
-public class GuestbookController {
+class GuestbookController {
 
 	// A special header sent with each AJAX request
 	private static final String IS_AJAX_HEADER = "X-Requested-With=XMLHttpRequest";
@@ -68,7 +67,7 @@ public class GuestbookController {
 	 * @return
 	 */
 	@RequestMapping("/")
-	public String index() {
+	String index() {
 		return "redirect:/guestbook";
 	}
 
@@ -79,7 +78,7 @@ public class GuestbookController {
 	 * @return
 	 */
 	@RequestMapping(value = "/guestbook", method = RequestMethod.GET)
-	public String guestBook(Model model, GuestbookForm form) {
+	String guestBook(Model model, GuestbookForm form) {
 
 		model.addAttribute("entries", guestbook.findAll());
 		model.addAttribute("form", form);
@@ -100,7 +99,7 @@ public class GuestbookController {
 	 * @return
 	 */
 	@RequestMapping(value = "/guestbook", method = RequestMethod.POST)
-	public String addEntry(@Valid GuestbookForm form, Errors errors, Model model) {
+	String addEntry(@Valid GuestbookForm form, Errors errors, Model model) {
 
 		if (errors.hasErrors()) {
 			return guestBook(model, form);
@@ -120,7 +119,7 @@ public class GuestbookController {
 	 * @see #addEntry(String, String)
 	 */
 	@RequestMapping(value = "/guestbook", method = RequestMethod.POST, headers = IS_AJAX_HEADER)
-	public String addEntry(@Valid GuestbookForm form, Model model) {
+	String addEntry(@Valid GuestbookForm form, Model model) {
 
 		model.addAttribute("entry", guestbook.save(new GuestbookEntry(form.getName(), form.getText())));
 		model.addAttribute("index", guestbook.count());
@@ -135,7 +134,7 @@ public class GuestbookController {
 	 * @return
 	 */
 	@RequestMapping(value = "/guestbook/{id}", method = RequestMethod.DELETE)
-	public String removeEntry(@PathVariable Long id) {
+	String removeEntry(@PathVariable Long id) {
 		guestbook.delete(id);
 		return "redirect:/guestbook";
 	}
@@ -147,11 +146,13 @@ public class GuestbookController {
 	 * @return
 	 */
 	@RequestMapping(value = "/guestbook/{id}", method = RequestMethod.DELETE, headers = IS_AJAX_HEADER)
-	public HttpEntity<?> removeEntryJS(@PathVariable Long id) {
+	HttpEntity<?> removeEntryJS(@PathVariable Long id) {
 
 		return guestbook.findOne(id).map(e -> {
+
 			guestbook.delete(id);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+			return ResponseEntity.ok().build();
+
+		}).orElse(ResponseEntity.notFound().build());
 	}
 }
