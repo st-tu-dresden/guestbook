@@ -21,7 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.orm.jpa.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 /**
  * The core class to bootstrap our application. It trigger the auto-configuration of the Spring Container (see
@@ -33,6 +37,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @author Oliver Gierke
  */
 @SpringBootApplication
+@EntityScan(basePackageClasses = { Application.class, Jsr310JpaConverters.class })
 public class Application {
 
 	/**
@@ -42,6 +47,16 @@ public class Application {
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
+	}
+
+	/**
+	 * Special dialect to support Java 8 type formatting.
+	 * 
+	 * @return
+	 */
+	@Bean
+	public Java8TimeDialect java8TimeDialect() {
+		return new Java8TimeDialect();
 	}
 
 	@Autowired Guestbook guestbook;
@@ -55,8 +70,8 @@ public class Application {
 
 		guestbook.save(new GuestbookEntry("H4xx0r", "first!!!"));
 		guestbook.save(new GuestbookEntry("Arni", "Hasta la vista, baby"));
-		guestbook.save(new GuestbookEntry("Duke Nukem",
-				"It's time to kick ass and chew bubble gum. And I'm all out of gum."));
+		guestbook
+				.save(new GuestbookEntry("Duke Nukem", "It's time to kick ass and chew bubble gum. And I'm all out of gum."));
 		guestbook.save(new GuestbookEntry("Gump1337",
 				"Mama always said life was like a box of chocolates. You never know what you're gonna get."));
 	}

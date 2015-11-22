@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2015 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package guestbook;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +35,7 @@ public class GuestbookEntry {
 
 	private @Id @GeneratedValue Long id;
 	private final String name, text;
-	private final Date date;
+	private final LocalDateTime date;
 
 	/**
 	 * Creates a new {@link GuestbookEntry} for the given name and text.
@@ -50,7 +50,7 @@ public class GuestbookEntry {
 
 		this.name = name;
 		this.text = text;
-		this.date = new Date();
+		this.date = LocalDateTime.now();
 	}
 
 	@SuppressWarnings("unused")
@@ -68,7 +68,7 @@ public class GuestbookEntry {
 		return id;
 	}
 
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
