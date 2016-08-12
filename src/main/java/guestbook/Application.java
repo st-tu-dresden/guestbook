@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 /**
@@ -37,7 +35,6 @@ import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
  * @author Oliver Gierke
  */
 @SpringBootApplication
-@EntityScan(basePackageClasses = { Application.class, Jsr310JpaConverters.class })
 public class Application {
 
 	/**
