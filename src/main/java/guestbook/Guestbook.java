@@ -26,7 +26,7 @@ import org.springframework.data.repository.Repository;
  * @see http://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks_of_DDD
  * @see http://projects.spring.io/spring-data-jpa/
  */
-public interface Guestbook extends Repository<GuestbookEntry, Long> {
+interface Guestbook extends Repository<GuestbookEntry, Long> {
 
 	/**
 	 * Deletes the {@link GuestbookEntry} with the given id.

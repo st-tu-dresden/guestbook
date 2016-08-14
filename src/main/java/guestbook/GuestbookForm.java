@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2015-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package guestbook.web;
+package guestbook;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
+ * Interface to bind request payloads and make them available in the controller.
+ * 
  * @author Oliver Gierke
+ * @see GuestbookController#addEntry(GuestbookForm, org.springframework.validation.Errors, org.springframework.ui.Model)
  */
 interface GuestbookForm {
 
+	/**
+	 * Returns the value bound to the {@code name} attribute of the request.
+	 * 
+	 * @return
+	 */
 	@NotBlank
 	String getName();
 
+	/**
+	 * Returns the value bound to the {@code text} attribute of the request.
+	 * 
+	 * @return
+	 */
 	@NotBlank
 	String getText();
+
+	/**
+	 * Returns a new {@link GuestbookEntry} using the data submitted in the request.
+	 * 
+	 * @return
+	 */
+	default GuestbookEntry toNewEntry() {
+		return new GuestbookEntry(getName(), getText());
+	}
 }
