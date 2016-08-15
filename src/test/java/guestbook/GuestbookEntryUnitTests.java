@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package guestbook;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.Test;
 
 /**
@@ -24,8 +26,22 @@ import org.junit.Test;
  */
 public class GuestbookEntryUnitTests {
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void rejectsEmptyName() {
-		new GuestbookEntry("", "May the 4th be with you!");
+
+		assertThatExceptionOfType(IllegalArgumentException.class)//
+				.isThrownBy(() -> new GuestbookEntry("", "May the 4th be with you!"));
+	}
+
+	@Test
+	public void rejectsEmptyText() {
+
+		assertThatExceptionOfType(IllegalArgumentException.class)//
+				.isThrownBy(() -> new GuestbookEntry("Ollie", ""));
+	}
+
+	@Test
+	public void setCreationDate() {
+		assertThat(new GuestbookEntry("Ollie", "May the 4th be with you!").getDate()).isNotNull();
 	}
 }

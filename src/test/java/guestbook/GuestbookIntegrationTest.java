@@ -15,8 +15,7 @@
  */
 package guestbook;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import javax.transaction.Transactional;
 
@@ -45,10 +44,8 @@ public class GuestbookIntegrationTest {
 	@Test
 	public void persistsGuestbookEntry() {
 
-		GuestbookEntry entry = new GuestbookEntry("Yoda", "May the force be with you!");
+		GuestbookEntry entry = repository.save(new GuestbookEntry("Yoda", "May the force be with you!"));
 
-		repository.save(entry);
-
-		assertThat(repository.findAll(), hasItem(entry));
+		assertThat(repository.findAll()).contains(entry);
 	}
 }
