@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -47,5 +48,16 @@ public class GuestbookIntegrationTest {
 		GuestbookEntry entry = repository.save(new GuestbookEntry("Yoda", "May the force be with you!"));
 
 		assertThat(repository.findAll()).contains(entry);
+	}
+
+	/**
+	 * @see #34
+	 */
+	@Test
+	public void findsGuestbookEntryByAuthorName() {
+
+		GuestbookEntry entry = repository.save(new GuestbookEntry("Yoda", "May the force be with you!"));
+
+		assertThat(repository.findByName("Yoda", new Sort("date"))).contains(entry);
 	}
 }

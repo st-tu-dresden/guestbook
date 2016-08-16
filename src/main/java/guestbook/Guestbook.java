@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package guestbook;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.Repository;
 
 /**
@@ -64,4 +65,12 @@ interface Guestbook extends Repository<GuestbookEntry, Long> {
 	 * @return
 	 */
 	int count();
+
+	/**
+	 * Returns all {@link GuestbookEntry}s created by the user with the given name, sorted by the given sort criteria.
+	 * 
+	 * @param string
+	 * @return
+	 */
+	Iterable<GuestbookEntry> findByName(String string, Sort sort);
 }
