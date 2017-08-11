@@ -19,7 +19,7 @@
 
 	<dependencies>
 
-		<!--  Persistence -->
+		<!-- Persistence -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
