@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 the original author or authors.
+ * Copyright 2014-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,11 @@ package guestbook;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -44,20 +45,21 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Autowired Guestbook guestbook;
-
 	/**
 	 * Some initializing code to pre-fill our database with {@link GuestbookEntry}. The {@link PostConstruct} annotation
 	 * is causing the Spring container to trigger the execution on application startup.
 	 */
-	@PostConstruct
-	void initialize() {
+	@Bean
+	CommandLineRunner init(Guestbook guestbook) {
 
-		guestbook.save(new GuestbookEntry("H4xx0r", "first!!!"));
-		guestbook.save(new GuestbookEntry("Arni", "Hasta la vista, baby"));
-		guestbook
-				.save(new GuestbookEntry("Duke Nukem", "It's time to kick ass and chew bubble gum. And I'm all out of gum."));
-		guestbook.save(new GuestbookEntry("Gump1337",
-				"Mama always said life was like a box of chocolates. You never know what you're gonna get."));
+		return args -> {
+
+			guestbook.save(new GuestbookEntry("H4xx0r", "first!!!"));
+			guestbook.save(new GuestbookEntry("Arni", "Hasta la vista, baby"));
+			guestbook
+					.save(new GuestbookEntry("Duke Nukem", "It's time to kick ass and chew bubble gum. And I'm all out of gum."));
+			guestbook.save(new GuestbookEntry("Gump1337",
+					"Mama always said life was like a box of chocolates. You never know what you're gonna get."));
+		};
 	}
 }
