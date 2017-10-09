@@ -149,7 +149,7 @@ class GuestbookController {
 
 		return guestbook.findOne(id).map(e -> {
 
-			guestbook.delete(id);
+			guestbook.delete(e.getId());
 			return ResponseEntity.ok().build();
 
 		}).orElse(ResponseEntity.notFound().build());
