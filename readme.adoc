@@ -28,9 +28,9 @@ http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.h
 [source, bash]
 ----
 $ java -version
-java version "1.8.0_45"
-Java(TM) SE Runtime Environment (build 1.8.0_45-b14)
-Java HotSpot(TM) 64-Bit Server VM (build 25.45-b02, mixed mode)
+java version "1.8.0_144"
+Java(TM) SE Runtime Environment (build 1.8.0_144-b01)
+Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)
 ----
 
 ### Maven 3.x
@@ -40,12 +40,12 @@ http://maven.apache.org/download.cgi[Download] the binaries, unzip to an arbitra
 [source, bash]
 ----
 $ mvn --version
-Apache Maven 3.3.1 (cab6659f9874fa96462afef40fcf6bc033d58c1c; 2015-03-13T21:10:27+01:00)
-Maven home: /Applications/Tools/maven-3
-Java version: 1.8.0_45, vendor: Oracle Corporation
-Java home: /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre
+Apache Maven 3.5.0 (ff8f5e7444045639af65f6095c62210b5713f426; 2017-04-03T21:39:06+02:00)
+Maven home: /usr/local/Cellar/maven/3.5.0/libexec
+Java version: 1.8.0_144, vendor: Oracle Corporation
+Java home: /Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/jre
 Default locale: de_DE, platform encoding: UTF-8
-OS name: "mac os x", version: "10.10.4", arch: "x86_64", family: "mac"
+OS name: "mac os x", version: "10.12.6", arch: "x86_64", family: "mac"
 ----
 
 ### Git
@@ -55,7 +55,7 @@ http://git-scm.com/download[Download] the binaries, run the installer. Verify th
 [source, bash]
 ----
 $ git --version
-git version 2.2.1
+git version 2.14.1
 ----
 
 ## IDE Setup
@@ -74,7 +74,7 @@ This sample application is build on top of the following technologies:
 
 Rapid application development framework based on Spring (see below).
 
-- http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle[Reference documentation]
+- http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle[Reference documentation]
 - https://spring.io/guides[Getting started guides]
 - http://projects.spring.io/spring-boot[Project home]
 
