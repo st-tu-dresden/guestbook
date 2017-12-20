@@ -134,7 +134,8 @@ class GuestbookController {
 	@DeleteMapping(path = "/guestbook/{id}")
 	String removeEntry(@PathVariable Long id) {
 
-		guestbook.delete(id);
+		guestbook.deleteById(id);
+
 		return "redirect:/guestbook";
 	}
 
@@ -147,9 +148,9 @@ class GuestbookController {
 	@DeleteMapping(path = "/guestbook/{id}", headers = IS_AJAX_HEADER)
 	HttpEntity<?> removeEntryJS(@PathVariable Long id) {
 
-		return guestbook.findOne(id).map(e -> {
+		return guestbook.findById(id).map(e -> {
 
-			guestbook.delete(e.getId());
+			guestbook.deleteById(e.getId());
 			return ResponseEntity.ok().build();
 
 		}).orElse(ResponseEntity.notFound().build());

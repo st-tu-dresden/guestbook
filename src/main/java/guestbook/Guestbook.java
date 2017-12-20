@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.Repository;
+import org.springframework.data.util.Streamable;
 
 /**
  * A repository to manage {@link GuestbookEntry} instances. The methods are dynamically implemented by Spring Data JPA.
@@ -34,7 +35,7 @@ interface Guestbook extends Repository<GuestbookEntry, Long> {
 	 * 
 	 * @param id must not be {@literal null}.
 	 */
-	void delete(Long id);
+	void deleteById(Long id);
 
 	/**
 	 * Saves the given {@link GuestbookEntry}.
@@ -50,14 +51,14 @@ interface Guestbook extends Repository<GuestbookEntry, Long> {
 	 * @param id must not be {@literal null}.
 	 * @return
 	 */
-	Optional<GuestbookEntry> findOne(Long id);
+	Optional<GuestbookEntry> findById(Long id);
 
 	/**
 	 * Returns all {@link GuestbookEntry}s available.
 	 * 
 	 * @return
 	 */
-	Iterable<GuestbookEntry> findAll();
+	Streamable<GuestbookEntry> findAll();
 
 	/**
 	 * Returns the number of {@link GuestbookEntry}s available.
@@ -72,5 +73,5 @@ interface Guestbook extends Repository<GuestbookEntry, Long> {
 	 * @param string
 	 * @return
 	 */
-	Iterable<GuestbookEntry> findByName(String string, Sort sort);
+	Streamable<GuestbookEntry> findByName(String string, Sort sort);
 }
