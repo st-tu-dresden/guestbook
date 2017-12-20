@@ -18,12 +18,11 @@ package guestbook;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.util.Streamable;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
@@ -41,7 +40,7 @@ public class GuestbookControllerUnitTests {
 	public void populatesModelForGuestbook() {
 
 		GuestbookEntry entry = new GuestbookEntry("Yoda", "May the 4th b with you!");
-		doReturn(Arrays.asList(entry)).when(guestbook).findAll();
+		doReturn(Streamable.of(entry)).when(guestbook).findAll();
 
 		Model model = new ExtendedModelMap();
 		GuestbookForm form = mock(GuestbookForm.class);
