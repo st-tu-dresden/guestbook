@@ -65,6 +65,7 @@ class GuestbookEntry {
 	}
 
 	public Long getId() {
+
 		return id;
 	}
 

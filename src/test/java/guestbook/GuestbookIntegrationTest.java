@@ -17,6 +17,7 @@ package guestbook;
 
 import static org.assertj.core.api.Assertions.*;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.junit.Test;
@@ -41,6 +42,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class GuestbookIntegrationTest {
 
 	@Autowired Guestbook repository;
+	@Autowired EntityManager em;
 
 	@Test
 	public void persistsGuestbookEntry() {
