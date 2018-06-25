@@ -3,3 +3,6 @@ target/
 .project
 .classpath
 .springBeans
+*.ipr
+*.iws
+*.iml
