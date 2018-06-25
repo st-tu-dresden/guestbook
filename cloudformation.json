@@ -1,0 +1,605 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Deploy guestbook in its own cluster using cfn init.",
+  "Parameters": {
+    "KeyName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+    },
+    "Application": {
+      "Description": "Name of application to map to S3 Bucket",
+      "Type": "String",
+      "AllowedValues": [
+        "guestbook"
+      ],
+      "ConstraintDescription": "Must Be Valid S3 Bucket"
+    },
+    "ApplicationVersion": {
+      "Description": "Application Version Number To Map To Application Key In S3",
+      "Type": "String",
+      "ConstraintDescription": "Must Be Valid Application Version Label"
+    },
+    "InstanceType": {
+      "Description": "EC2 instance type",
+      "Type": "String",
+      "Default": "m3.medium",
+      "AllowedValues": [
+        "m3.medium",
+        "m3.large",
+        "m4.xlarge",
+        "m4.2xlarge",
+        "m4.4xlarge",
+        "t2.medium",
+        "t2.small"
+      ],
+      "ConstraintDescription": "must be a valid EC2 instance type."
+    },
+    "ScalingMax": {
+      "Description": "Max Number to scale EC2 instances to",
+      "Type": "String",
+      "Default": "3",
+      "AllowedValues": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "ScalingMin": {
+      "Description": "Min Number to scale EC2 instances to",
+      "Type": "String",
+      "Default": "1",
+      "AllowedValues": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "GuestbookEnv": {
+      "Description": "Guestbook environment",
+      "Type": "String",
+      "Default": "DEV",
+      "AllowedValues": [
+        "DEV",
+        "STG",
+        "DEVINT",
+        "PRD"
+      ]
+    },
+    "Restart": {
+      "Description": "Parameter to change when only a restart is needed",
+      "Type": "String",
+      "ConstraintDescription": "must be either 0 or 1"
+    },
+    "AdditionalJavaOpts": {
+      "Description": "Additional JAVA_OPTS as system properties, -Dname=value",
+      "Type": "String",
+      "ConstraintDescription": "Set as system property, -D"
+    },
+    "MonitoringStackID": {
+      "Description": "The Cloud Formaiton Stack ID this deployment will monitor",
+      "Type" : "String"
+    }
+  },
+  "Mappings": {
+    "AWSInstanceType2Arch": {
+      "m3.large": {
+        "Arch": "HVM64"
+      },
+      "m3.medium": {
+        "Arch": "HVM64"
+      },
+      "t2.medium": {
+        "Arch": "HVM64"
+      },
+      "t2.small": {
+        "Arch": "HVM64"
+      },
+      "m4.xlarge": {
+        "Arch": "HVM64"
+      },
+      "m4.2xlarge": {
+        "Arch": "HVM64"
+      },
+      "m4.4xlarge": {
+        "Arch": "HVM64"
+      }
+    },
+    "AWSRegionArch2AMI": {
+      "us-east-1": {
+        "HVM64": "ami-4b6b3634"
+      },
+      "us-west-2": {
+        "HVM64": "ami-d65d15ae"
+      }
+    },
+    "AWSRegionToVPC": {
+      "us-east-1": {
+        "DEV": "vpc-aacf30cd",
+        "DEVINT": "vpc-aacf30cd",
+        "PRD": "vpc-1d269e64",
+        "STG": "vpc-aacf30cd"
+      },
+      "us-west-2": {
+        "DEV": "vpc-89579bed",
+        "DEVINT": "vpc-89579bed",
+        "PRD": "vpc-f5770792",
+        "STG": "vpc-89579bed"
+      }
+    },
+    "Region2SubnetsEC2": {
+      "us-east-1": {
+        "DEV": [
+          "subnet-c97a19e3",
+          "subnet-79acfe0f",
+          "subnet-b1fd6abd",
+          "subnet-266a0143"
+        ],
+        "PRD": [
+          "subnet-a2f747f8",
+          "subnet-a56819ed",
+          "subnet-ba11fa84"
+        ],
+        "STG": [
+          "subnet-c97a19e3",
+          "subnet-79acfe0f",
+          "subnet-b1fd6abd",
+          "subnet-266a0143"
+        ],
+        "DEVINT": [
+          "subnet-c97a19e3",
+          "subnet-79acfe0f",
+          "subnet-b1fd6abd",
+          "subnet-266a0143"
+        ]
+      },
+      "us-west-2": {
+        "DEV": [
+          "subnet-6dd23a1b",
+          "subnet-47c61123",
+          "subnet-8e6460d7"
+        ],
+        "PRD": [
+          "subnet-0218bb4b",
+          "subnet-58e29421",
+          "subnet-35e9e96d"
+        ],
+        "STG": [
+          "subnet-6dd23a1b",
+          "subnet-47c61123",
+          "subnet-8e6460d7"
+        ],
+        "DEVINT": [
+          "subnet-6dd23a1b",
+          "subnet-47c61123",
+          "subnet-8e6460d7"
+        ]
+      }
+    },
+    "VPC2AZs": {
+      "us-east-1": {
+        "AZ": [
+          "us-east-1a",
+          "us-east-1b",
+          "us-east-1d",
+          "us-east-1e",
+          "us-east-1f"
+        ]
+      },
+      "us-west-2": {
+        "AZ": [
+          "us-west-2a",
+          "us-west-2b",
+          "us-west-2c"
+        ]
+      }
+    },
+    "Ec2Role": {
+      "DEV": {
+        "Role": "arn:aws:iam::087502004190:instance-profile/EC2Admin"
+      },
+      "STG": {
+        "Role": "arn:aws:iam::087502004190:instance-profile/EC2Admin"
+      },
+      "DEVINT": {
+        "Role": "arn:aws:iam::087502004190:instance-profile/EC2Admin"
+      },
+      "PRD": {
+        "Role": "arn:aws:iam::087502004190:instance-profile/EC2Admin"
+      }
+    }
+  },
+  "Resources": {
+    "InstanceSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Security Group for Guestbook EC2 Instances",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "0",
+            "IpProtocol": "tcp",
+            "ToPort": "65535"
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "0",
+            "IpProtocol": "udp",
+            "ToPort": "65535"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "80",
+            "IpProtocol": "tcp",
+            "ToPort": "80"
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "8080",
+            "IpProtocol": "tcp",
+            "ToPort": "8080"
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "8443",
+            "IpProtocol": "tcp",
+            "ToPort": "8443"
+          },
+          {
+            "CidrIp": "50.206.225.4/32",
+            "FromPort": "22",
+            "IpProtocol": "tcp",
+            "ToPort": "22"
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": "4118",
+            "IpProtocol": "tcp",
+            "ToPort": "4118"
+          }
+        ],
+        "VpcId": {
+          "Fn::FindInMap": [
+            "AWSRegionToVPC",
+            {
+              "Ref": "AWS::Region"
+            },
+            {
+              "Ref": "GuestbookEnv"
+            }
+          ]
+        }
+      }
+    },
+    "GBLaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Metadata": {
+        "Version": {
+          "Ref": "ApplicationVersion"
+        },
+        "Restart": {
+          "Ref": "Restart"
+        },
+        "AWS::CloudFormation::Init": {
+          "configSets" : {
+            "deployment": ["deploy", "startcfnhup", "monitoring"]
+          },
+          "deploy": {
+            "files": {
+              "/etc/cfn/cfn-hup.conf": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "[main]\n",
+                      "stack=",
+                      {
+                        "Ref": "AWS::StackId"
+                      },
+                      "\n",
+                      "region=",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "\n",
+                      "interval=1\n"
+                    ]
+                  ]
+                }
+              },
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "[cfn-auto-reloader-hook]\n",
+                      "triggers=post.update\n",
+                      "path=Resources.GBLaunchConfig.Metadata.AWS::CloudFormation::Init\n",
+                      "action=/opt/aws/bin/cfn-init -v -c deployment -s ", {"Ref": "AWS::StackId"}, " -r GBLaunchConfig",
+                      " --region ", {"Ref": "AWS::Region"}, "\n",
+                      "runas=root"
+                    ]
+                  ]
+                }
+              },
+              "/var/tmp/deployScript/deploy.py": {
+                "source": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "https://s3.amazonaws.com/",
+                      "guestbook-app-releases",
+                      "/deploy.py"
+                    ]
+                  ]
+                }
+              },
+              "/var/tmp/deployScript/prep.sh": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "#!/bin/bash",
+                      "\n",
+                      "date > /home/ec2-user/starttime\n",
+                      "ipaddress=`curl http://169.254.169.254/latest/meta-data/local-ipv4`","\n",
+                      "hostname=`/bin/hostname`","\n",
+                      "echo \"$ipaddress  $hostname\" >> /etc/hosts", "\n",
+                      "sed -E 's/connectionTimeout=\"[[:digit:]]+\"/connectionTimeout=\"45000\"/g' /etc/tomcat7/server.xml > /etc/tomcat7/server.xml.improved","\n",
+                      "mv -f /etc/tomcat7/server.xml.improved /etc/tomcat7/server.xml","\n",
+                      "cat /etc/tomcat7/server.xml","\n",
+                      "export version='",
+                      {
+                        "Ref": "ApplicationVersion"
+                      },
+                      "'\n",
+                      "export environment='",
+                      {
+                        "Ref": "GuestbookEnv"
+                      },
+                      "'\n",
+                      "export region='",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "'\n",
+                      "export ADDOPTS='",
+                      {
+                        "Ref": "AdditionalJavaOpts"
+                      },
+                      "'\n",
+                      "mv /etc/tomcat7/tomcat7.blank /etc/tomcat7/tomcat7.conf",
+                      "\n",
+                      "echo \"JAVA_OPTS='-Xms2g -Xmx6g -XX:MaxPermSize=512M",
+                      "\n",
+                      "echo 'export SHUTDOWN_WAIT=300' >> /etc/tomcat7/tomcat7.conf",
+                      "\n",
+                      "mkdir /var/tmp/deployScript",
+                      "\n",
+                      "chmod 777 /var/tmp/deployScript",
+                      "\n",
+                      "aws s3 cp s3://guestbook-app-releases/deployment-scripts/deploy.py /var/tmp/deployScript/deploy.py",
+                      "\n",
+                      "chmod 755 /var/tmp/deployScript/deploy.py",
+                      "\n",
+                      "/usr/bin/python /var/tmp/deployScript/deploy.py"
+                    ]
+                  ]
+                },
+                "mode": "000777",
+                "owner": "root",
+                "group": "root"
+              },
+              "/var/tmp/cfn/restart": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "Restart"
+                      }
+                    ]
+                  ]
+                }
+              }
+            },
+            "commands": {
+              "1-deploy-application": {
+                "command": "/var/tmp/deployScript/prep.sh"
+              }
+            }
+          },
+          "startcfnhup" : {
+            "services": {
+              "sysvinit": {
+                "cfn-hup": {
+                  "enabled": "true",
+                  "ensureRunning": "true",
+                  "files": [
+                    "/etc/cfn/cfn-hup.conf",
+                    "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
+                  ]
+                }
+              }
+            }
+          },
+          "monitoring": {
+            "packages": {
+              "yum": {
+                "perl-DateTime": [],
+                "perl-Sys-Syslog": [],
+                "perl-LWP-Protocol-https": []
+              }
+            },
+            "files": {
+              "/tmp/CloudWatchMonitoringScripts.zip": {
+                "source": "http://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.1.zip"
+              },
+              "/etc/cron.d/monitoring": {
+                "content": { "Fn::Join": ["\n", [
+                  "SHELL=/bin/bash",
+                  "PATH=/sbin:/bin:/usr/sbin:/usr/bin",
+                  "MAILTO=''",
+                  "HOME=/",
+                  "* * * * * ec2-user /tmp/aws-scripts-mon/mon-put-instance-data.pl --mem-util --disk-space-util --disk-path=/ --from-cron"
+                ]]},
+                "mode": "000644",
+                "owner": "root",
+                "group": "root"
+              }
+            },
+            "commands": {
+              "unzip": {
+                "command": ["/usr/bin/unzip", "-o", "CloudWatchMonitoringScripts.zip"],
+                "cwd": "/tmp"
+              }
+            }
+          }
+        }
+      },
+      "Properties": {
+        "IamInstanceProfile": {
+          "Fn::FindInMap": [
+            "Ec2Role",
+            {
+              "Ref": "GuestbookEnv"
+            },
+            "Role"
+          ]
+        },
+        "ImageId": {
+          "Fn::FindInMap": [
+            "AWSRegionArch2AMI",
+            {
+              "Ref": "AWS::Region"
+            },
+            {
+              "Fn::FindInMap": [
+                "AWSInstanceType2Arch",
+                {
+                  "Ref": "InstanceType"
+                },
+                "Arch"
+              ]
+            }
+          ]
+        },
+        "SecurityGroups": [
+          {
+            "Ref": "InstanceSecurityGroup"
+          }
+        ],
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash",
+                "\n",
+                "yum update -y aws-cfn-bootstrap",
+                "\n",
+                "stackID='",
+                {
+                  "Ref": "AWS::StackId"
+                },
+                "'\n",
+                "/opt/aws/bin/cfn-init -v -c deployment -s $stackID -r GBLaunchConfig --region ",
+                {
+                  "Ref": "AWS::Region"
+                }
+              ]
+            ]
+          }
+        },
+        "InstanceMonitoring": "true"
+      }
+    },
+    "GBAutoScaling": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "AvailabilityZones": {
+          "Fn::GetAZs": {
+            "Ref": "AWS::Region"
+          }
+        },
+        "MinSize": {
+          "Ref": "ScalingMin"
+        },
+        "MaxSize": {
+          "Ref": "ScalingMax"
+        },
+        "LaunchConfigurationName": {
+          "Ref": "GBLaunchConfig"
+        },
+        "VPCZoneIdentifier": {
+          "Fn::FindInMap": [
+            "Region2SubnetsEC2",
+            {
+              "Ref": "AWS::Region"
+            },
+            {
+              "Ref": "GuestbookEnv"
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "uptimehours",
+            "Value": "24",
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "service",
+            "Value": {
+              "Ref": "Application"
+            },
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "owner",
+            "Value": "andrew.cook4@hotmail.com",
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "version",
+            "Value": {
+              "Ref": "ApplicationVersion"
+            },
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Name",
+            "PropagateAtLaunch": "true",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  "GB",
+                  {
+                    "Ref": "GuestbookEnv"
+                  }
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "StackId" : {
+      "Description": "Stack ID of Monitoring Deployment",
+      "Value" : {
+        "Ref": "AWS::StackId"
+      }
+    }
+  }
+}

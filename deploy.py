@@ -14,19 +14,15 @@ import boto.cloudformation
 import shutil
 import requests
 
-ACCESS_KEY = 'AKIAINRSHZC4HMXRVKJA'
-SECRET_KEY = '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'
-egx_version = os.environ['version']
-egx_component = os.environ['component']
-egx_environment = os.environ['environment']
-egx_region = os.environ['region']
-egx_branchname = os.environ['branchname']
-egx_buildnumber = os.environ['buildnumber']
+ACCESS_KEY='AKIAIQ5OUWZIICLMNVCQ'
+SECRET_KEY='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'
+gb_version = os.environ['version']
+gb_environment = os.environ['environment']
+gb_region = os.environ['region']
 
 class SNSMessage:
-    def __init__(self,eventType,eventComponent,eventEnv,eventHost,region,version):
+    def __init__(self,eventType,eventEnv,eventHost,region,version):
         self.eventType = eventType
-        self.eventComponent = eventComponent
         self.eventEnv = eventEnv
         self.eventHost = eventHost
         self.awsRegion = region
@@ -44,9 +40,6 @@ class SNSMessage:
         attrib = { 'EventType' :
                    { 'data_type' : 'String',
                      'string_value' : self.eventType },
-                'EventComponent' :
-                   { 'data_type' : 'String',
-                     'string_value' : self.eventComponent },
                 'EventENV' :
                    { 'data_type' : 'String',
                      'string_value' : self.eventEnv },
@@ -62,14 +55,11 @@ class SNSMessage:
         print post
 
 class Deploy:
-    def __init__(self, version, component, env, region, branchname, buildnumber):
+    def __init__(self, version, env, region):
         self.version = version
-        self.component = component
         self.env = env
         self.region = region
         self.ec2Connection = boto.ec2.connect_to_region(region_name=region)
-        self.branchname = branchname
-        self.buildnumber = buildnumber
 
     @staticmethod
     def getartifact(signedurl):
@@ -131,21 +121,15 @@ class Deploy:
             print 'Nothing to clean...'
 
     @staticmethod
-    def testCall(component):
+    def testCall():
         response = 0
         counter = 0
         deploymentComplete = False
         while response == 0 :
             try:
-                if component == 'universal-engine':
-                    siteTestCall = requests.get('http://localhost:8080/engine/ping', timeout=5)
-                    response = siteTestCall.status_code
-                else:
-                    #siteTestCall = requests.get('http://localhost:8080', timeout=5)
-                    #response = siteTestCall.status_code
-                    print "Not testing since this is a UI deployment"
-                    break
-            except requests.RequestException, e:
+                siteTestCall = requests.get('http://localhost:8080/engine/ping', timeout=5)
+                response = siteTestCall.status_code
+              except requests.RequestException, e:
                 print e.args
                 time.sleep(15)
                 pass
@@ -171,11 +155,9 @@ class Deploy:
 
     def Deploy(self):
         version = self.version
-        component = self.component
         env = self.env
         region = self.region
         branchname = self.branchname
-        buildnumber = self.buildnumber
 
         metadata = requests.get('http://169.254.169.254/latest/meta-data/instance-id')
         instance_id = metadata.text
@@ -195,14 +177,12 @@ class Deploy:
         print 'Downloading EGX Artifacts'
         conn = boto.connect_s3(aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY)
         try:
-            bucketLookup = conn.get_bucket('ghx-deployment')
-
-
-            bucketPrefix = 'EGX/' + version + '/' + component + '-' + version + '-' + buildnumber + '-' + branchname + '.war'
-            filename = component + '-' + version + '-' + buildnumber + '-' + branchname + '.war'
-            EGX_key = bucketLookup.get_key(bucketPrefix)
-            EGX_url = EGX_key.generate_url(3600, query_auth=True)
-            self.getartifact(EGX_url)
+            bucketLookup = conn.get_bucket('guestbook-app-releases')
+            bucketPrefix = '/' + version
+            filename = 'guestbook.war'
+            GB_key = bucketLookup.get_key(bucketPrefix)
+            GB_url = GB_key.generate_url(3600, query_auth=True)
+            self.getartifact(GB_url)
         except boto.exception.S3PermissionsError:
             print "ERROR: There was a permissions issue with creating the bucket "
             raise
@@ -227,14 +207,14 @@ class Deploy:
         print 'Starting Tomcat...'
         self.startTomcat()
         
-        testsite = self.testCall(component)
+        testsite = self.testCall()
         
         if testsite:
             print "SUCCESS: Deployment Finished"
-            message = SNSMessage('Deployment', component, env , instance_id, region, version)
-            message.sendMessage('SUCCESS: Deployment of ' + component + version + ' is Complete', env)
+            message = SNSMessage('Deployment', env , instance_id, region, version)
+            message.sendMessage('SUCCESS: Deployment of ' + version + ' is Complete', env)
         else:
             print "ERROR: Deployment Finish, but did not respond to a ping"
             #exit (1)
 
-Deploy(egx_version,egx_component,egx_environment,egx_region,egx_branchname,egx_buildnumber).Deploy()
+Deploy(gb_version,gb_environment,gb_region).Deploy()
