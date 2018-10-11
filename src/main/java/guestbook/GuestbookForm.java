@@ -15,7 +15,7 @@
  */
 package guestbook;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 /**
  * Interface to bind request payloads and make them available in the controller.

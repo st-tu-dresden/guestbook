@@ -26,6 +26,7 @@ import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,7 +77,7 @@ class GuestbookController {
 	 * @return
 	 */
 	@GetMapping(path = "/guestbook")
-	String guestBook(Model model, GuestbookForm form) {
+	String guestBook(Model model, @ModelAttribute(name = "form", binding = false) GuestbookForm form) {
 
 		model.addAttribute("entries", guestbook.findAll());
 		model.addAttribute("form", form);
@@ -97,13 +98,14 @@ class GuestbookController {
 	 * @return
 	 */
 	@PostMapping(path = "/guestbook")
-	String addEntry(@Valid GuestbookForm form, Errors errors, Model model) {
+	String addEntry(@Valid @ModelAttribute("form") GuestbookForm form, Errors errors, Model model) {
 
 		if (errors.hasErrors()) {
 			return guestBook(model, form);
 		}
 
 		guestbook.save(form.toNewEntry());
+
 		return "redirect:/guestbook";
 	}
 
@@ -121,6 +123,7 @@ class GuestbookController {
 
 		model.addAttribute("entry", guestbook.save(form.toNewEntry()));
 		model.addAttribute("index", guestbook.count());
+
 		return "guestbook :: entry";
 	}
 
