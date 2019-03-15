@@ -7,14 +7,15 @@ Purpose of this sample project is to make students familiar with basic technolog
 
 ## Quickstart
 
-NOTE: The Quickstart requires Java 11, Maven 3.6 and a recent Git (2.21 or better preferred) to be available on your machine. If you miss any of those go through the steps described in <<prerequisites>>
+NOTE: The Quickstart requires Java 11, and a recent Git (2.21 or better preferred) to be available on your machine. If you miss any of those go through the steps described in <<prerequisites>>.
+Also, note that you have to run `mvnw.bat` instead of `mvnw` if you run Windows by accident.
 
 [source, shell]
 ----
 $ git clone https://github.com/st-tu-dresden/guestbook
 $ cd guestbook
-$ mvn clean package
-$ mvn spring-boot:run
+$ mvnw clean package
+$ mvnw spring-boot:run
 ----
 
 After that point your browser to `http://localhost:8080`.
@@ -31,20 +32,6 @@ $ java -version
 openjdk version "11.0.2" 2018-10-16
 OpenJDK Runtime Environment 18.9 (build 11.0.2+7)
 OpenJDK 64-Bit Server VM 18.9 (build 11.0.2+7, mixed mode)
-----
-
-### Maven 3.6
-
-http://maven.apache.org/download.cgi[Download] the binaries, unzip to an arbitrary location and make sure the `bin` folder of the unzipped result is in your path:
-
-[source, bash]
-----
-$ mvn -version
-Apache Maven 3.6.0 (97c98ec64a1fdfee7767ce5ffb20918da4f719f3; 2018-10-24T20:41:47+02:00)
-Maven home: /usr/local/Cellar/maven/3.6.0/libexec
-Java version: 11.0.2, vendor: Oracle Corporation, runtime: /Library/Java/JavaVirtualMachines/openjdk-11.0.2.jdk/Contents/Home
-Default locale: de_DE, platform encoding: UTF-8
-OS name: "mac os x", version: "10.14.3", arch: "x86_64", family: "mac"
 ----
 
 ### Git
