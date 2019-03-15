@@ -17,31 +17,31 @@ package guestbook;
 
 import static org.assertj.core.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {@link GuestbookEntry}.
  *
  * @author Oliver Gierke
  */
-public class GuestbookEntryUnitTests {
+class GuestbookEntryUnitTests {
 
 	@Test
-	public void rejectsEmptyName() {
+	void rejectsEmptyName() {
 
 		assertThatExceptionOfType(IllegalArgumentException.class)//
 				.isThrownBy(() -> new GuestbookEntry("", "May the 4th be with you!"));
 	}
 
 	@Test
-	public void rejectsEmptyText() {
+	void rejectsEmptyText() {
 
 		assertThatExceptionOfType(IllegalArgumentException.class)//
 				.isThrownBy(() -> new GuestbookEntry("Ollie", ""));
 	}
 
 	@Test
-	public void setsCreationDate() {
+	void setsCreationDate() {
 		assertThat(new GuestbookEntry("Ollie", "May the 4th be with you!").getDate()).isNotNull();
 	}
 }

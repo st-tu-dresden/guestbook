@@ -19,12 +19,10 @@ import static org.assertj.core.api.Assertions.*;
 
 import javax.transaction.Transactional;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Integration tests for {@link GuestbookRepository}.
@@ -35,15 +33,14 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author Oliver Gierke
  * @author Paul Henke
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class GuestbookRepositoryIntegrationTests {
+class GuestbookRepositoryIntegrationTests {
 
 	@Autowired GuestbookRepository repository;
 
 	@Test
-	public void persistsGuestbookEntry() {
+	void persistsGuestbookEntry() {
 
 		GuestbookEntry entry = repository.save(new GuestbookEntry("Yoda", "May the force be with you!"));
 
@@ -51,7 +48,7 @@ public class GuestbookRepositoryIntegrationTests {
 	}
 
 	@Test // #34
-	public void findsGuestbookEntryByAuthorName() {
+	void findsGuestbookEntryByAuthorName() {
 
 		GuestbookEntry entry = repository.save(new GuestbookEntry("Yoda", "May the force be with you!"));
 
