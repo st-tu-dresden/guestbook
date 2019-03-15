@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 the original author or authors.
+ * Copyright 2014-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package guestbook;
 
-import javax.annotation.PostConstruct;
+import java.util.stream.Stream;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,8 +27,8 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  * The core class to bootstrap our application. It trigger the auto-configuration of the Spring Container (see
  * {@link EnableAutoConfiguration}) and activates component-scanning (see {@link ComponentScan}). At the same time the
- * class acts as configuration class to configure additional components (see {@link #characterEncodingFilter()}) that
- * the contain will take into account when bootstrapping.
+ * class acts as configuration class to configure additional components (see {@link #init(GuestbookRepository)}) that
+ * the container will take into account when bootstrapping.
  *
  * @author Paul Henke
  * @author Oliver Gierke
@@ -38,7 +38,7 @@ public class Application {
 
 	/**
 	 * The main application method, bootstraps the Spring container.
-	 * 
+	 *
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -46,20 +46,22 @@ public class Application {
 	}
 
 	/**
-	 * Some initializing code to pre-fill our database with {@link GuestbookEntry}. The {@link PostConstruct} annotation
-	 * is causing the Spring container to trigger the execution on application startup.
+	 * Some initializing code to pre-fill our database with {@link GuestbookEntry}. Beans of type
+	 * {@link CommandLineRunner} will be executed on application startup which makes them a convenient way to run
+	 * initialization code.
 	 */
 	@Bean
-	CommandLineRunner init(Guestbook guestbook) {
+	CommandLineRunner init(GuestbookRepository guestbook) {
 
 		return args -> {
 
-			guestbook.save(new GuestbookEntry("H4xx0r", "first!!!"));
-			guestbook.save(new GuestbookEntry("Arni", "Hasta la vista, baby"));
-			guestbook
-					.save(new GuestbookEntry("Duke Nukem", "It's time to kick ass and chew bubble gum. And I'm all out of gum."));
-			guestbook.save(new GuestbookEntry("Gump1337",
-					"Mama always said life was like a box of chocolates. You never know what you're gonna get."));
+			Stream.of( //
+					new GuestbookEntry("H4xx0r", "first!!!"), //
+					new GuestbookEntry("Arni", "Hasta la vista, baby"), //
+					new GuestbookEntry("Duke Nukem", "It's time to kick ass and chew bubble gum. And I'm all out of gum."), //
+					new GuestbookEntry("Gump1337",
+							"Mama always said life was like a box of chocolates. You never know what you're gonna get.")) //
+					.forEach(guestbook::save);
 		};
 	}
 }

@@ -27,20 +27,20 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * Integration tests for {@link Guestbook}.
+ * Integration tests for {@link GuestbookRepository}.
  * <p>
  * Bootstraps the application using the {@link Application} configuration class. Enables transaction rollbacks after
  * test methods using the {@link Transactional} annotation.
- * 
+ *
  * @author Oliver Gierke
  * @author Paul Henke
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class GuestbookIntegrationTest {
+public class GuestbookRepositoryIntegrationTests {
 
-	@Autowired Guestbook repository;
+	@Autowired GuestbookRepository repository;
 
 	@Test
 	public void persistsGuestbookEntry() {
@@ -50,10 +50,7 @@ public class GuestbookIntegrationTest {
 		assertThat(repository.findAll()).contains(entry);
 	}
 
-	/**
-	 * @see #34
-	 */
-	@Test
+	@Test // #34
 	public void findsGuestbookEntryByAuthorName() {
 
 		GuestbookEntry entry = repository.save(new GuestbookEntry("Yoda", "May the force be with you!"));

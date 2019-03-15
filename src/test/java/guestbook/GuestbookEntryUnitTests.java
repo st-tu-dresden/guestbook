@@ -21,7 +21,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for {@link GuestbookEntry}.
- * 
+ *
  * @author Oliver Gierke
  */
 public class GuestbookEntryUnitTests {
@@ -41,7 +41,7 @@ public class GuestbookEntryUnitTests {
 	}
 
 	@Test
-	public void setCreationDate() {
+	public void setsCreationDate() {
 		assertThat(new GuestbookEntry("Ollie", "May the 4th be with you!").getDate()).isNotNull();
 	}
 }

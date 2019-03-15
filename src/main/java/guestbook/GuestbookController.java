@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 the original author or authors.
+ * Copyright 2014-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package guestbook;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * A controller to handle web requests to manage {@link GuestbookEntry}s
- * 
+ *
  * @author Paul Henke
  * @author Oliver Gierke
  */
@@ -44,16 +43,15 @@ class GuestbookController {
 	// A special header sent with each AJAX request
 	private static final String IS_AJAX_HEADER = "X-Requested-With=XMLHttpRequest";
 
-	private final Guestbook guestbook;
+	private final GuestbookRepository guestbook;
 
 	/**
-	 * Creates a new {@link GuestbookController} using the given {@link Guestbook}. The {@link Autowired} causes the
-	 * Spring container to try to find a Spring bean of type {@link Guestbook} and use it to create an instance of
-	 * {@link GuestbookController}.
-	 * 
+	 * Creates a new {@link GuestbookController} using the given {@link GuestbookRepository}. Spring will look for a bean of type
+	 * {@link GuestbookRepository} and hand this into this class when an instance is created.
+	 *
 	 * @param guestbook must not be {@literal null}.
 	 */
-	public GuestbookController(Guestbook guestbook) {
+	public GuestbookController(GuestbookRepository guestbook) {
 
 		Assert.notNull(guestbook, "Guestbook must not be null!");
 		this.guestbook = guestbook;
@@ -62,10 +60,10 @@ class GuestbookController {
 	/**
 	 * Handles requests to the application root URI. Note, that you can use {@code redirect:} as prefix to trigger a
 	 * browser redirect instead of simply rendering a view.
-	 * 
+	 *
 	 * @return
 	 */
-	@RequestMapping("/")
+	@GetMapping(path = "/")
 	String index() {
 		return "redirect:/guestbook";
 	}
@@ -73,11 +71,11 @@ class GuestbookController {
 	/**
 	 * Handles requests to access the guestbook. Obtains all currently available {@link GuestbookEntry}s and puts them
 	 * into the {@link Model} that's used to render the view.
-	 * 
+	 *
 	 * @return
 	 */
 	@GetMapping(path = "/guestbook")
-	String guestBook(Model model, @ModelAttribute(name = "form", binding = false) GuestbookForm form) {
+	String guestBook(Model model, @ModelAttribute(binding = false) GuestbookForm form) {
 
 		model.addAttribute("entries", guestbook.findAll());
 		model.addAttribute("form", form);
@@ -92,7 +90,7 @@ class GuestbookController {
 	 * <p>
 	 * For the sake of simplicity we don't do any validation here. Spring has support for that kind of stuff but we leave
 	 * that for the VideoShop example to cover.
-	 * 
+	 *
 	 * @param name the name of the person that made the entry
 	 * @param text the actual text of the entry
 	 * @return
@@ -111,7 +109,7 @@ class GuestbookController {
 
 	/**
 	 * Handles AJAX requests to create a new {@link GuestbookEntry}.
-	 * 
+	 *
 	 * @param name the name of the person that made the entry
 	 * @param text the actual text of the entry
 	 * @param model
@@ -130,7 +128,7 @@ class GuestbookController {
 	/**
 	 * Deletes a {@link GuestbookEntry}. Note how the path variable used in the {@link RequestMapping} annotation is bound
 	 * to the controller method using the {@link PathVariable} annotation.
-	 * 
+	 *
 	 * @param id the id of the {@link GuestbookEntry} to delete.
 	 * @return
 	 */
@@ -144,7 +142,7 @@ class GuestbookController {
 
 	/**
 	 * Handles AJAX requests to delete {@link GuestbookEntry}s.
-	 * 
+	 *
 	 * @param id the id of the {@link GuestbookEntry} to delete.
 	 * @return
 	 */

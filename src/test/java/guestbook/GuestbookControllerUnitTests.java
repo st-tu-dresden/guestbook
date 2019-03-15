@@ -28,13 +28,13 @@ import org.springframework.ui.Model;
 
 /**
  * Unit tests for {@link GuestbookController}.
- * 
+ *
  * @author Oliver Gierke
  */
 @RunWith(MockitoJUnitRunner.class)
 public class GuestbookControllerUnitTests {
 
-	@Mock Guestbook guestbook;
+	@Mock GuestbookRepository guestbook;
 
 	@Test
 	public void populatesModelForGuestbook() {
@@ -43,14 +43,13 @@ public class GuestbookControllerUnitTests {
 		doReturn(Streamable.of(entry)).when(guestbook).findAll();
 
 		Model model = new ExtendedModelMap();
-		GuestbookForm form = mock(GuestbookForm.class);
 
 		GuestbookController controller = new GuestbookController(guestbook);
-		String viewName = controller.guestBook(model, form);
+		String viewName = controller.guestBook(model, new GuestbookForm(null, null));
 
 		assertThat(viewName).isEqualTo("guestbook");
 		assertThat(model.asMap().get("entries")).isInstanceOf(Iterable.class);
-		assertThat(model.asMap().get("form")).isEqualTo(form);
+		assertThat(model.asMap().get("form")).isNotNull();
 
 		verify(guestbook, times(1)).findAll();
 	}

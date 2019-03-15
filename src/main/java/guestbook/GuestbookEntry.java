@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2016 the original author or authors.
+ * Copyright 2014-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
 
 /**
  * A guestbook entry. An entity as in the Domain Driven Design context. Mapped onto the database using JPA annotations.
- * 
+ *
  * @author Paul Henke
  * @author Oliver Gierke
  * @see http://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks_of_DDD
@@ -39,7 +39,7 @@ class GuestbookEntry {
 
 	/**
 	 * Creates a new {@link GuestbookEntry} for the given name and text.
-	 * 
+	 *
 	 * @param name must not be {@literal null} or empty.
 	 * @param text must not be {@literal null} or empty;
 	 */
