@@ -19,6 +19,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
@@ -46,8 +47,8 @@ class GuestbookController {
 	private final GuestbookRepository guestbook;
 
 	/**
-	 * Creates a new {@link GuestbookController} using the given {@link GuestbookRepository}. Spring will look for a bean of type
-	 * {@link GuestbookRepository} and hand this into this class when an instance is created.
+	 * Creates a new {@link GuestbookController} using the given {@link GuestbookRepository}. Spring will look for a bean
+	 * of type {@link GuestbookRepository} and hand this into this class when an instance is created.
 	 *
 	 * @param guestbook must not be {@literal null}.
 	 */
@@ -132,6 +133,7 @@ class GuestbookController {
 	 * @param id the id of the {@link GuestbookEntry} to delete.
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(path = "/guestbook/{id}")
 	String removeEntry(@PathVariable Long id) {
 
@@ -146,6 +148,7 @@ class GuestbookController {
 	 * @param id the id of the {@link GuestbookEntry} to delete.
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(path = "/guestbook/{id}", headers = IS_AJAX_HEADER)
 	HttpEntity<?> removeEntryJS(@PathVariable Long id) {
 

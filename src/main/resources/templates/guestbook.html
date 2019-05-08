@@ -1,6 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
@@ -18,14 +18,19 @@
 			<label for="use_ajax" th:text="#{guestbook.useajax}">Ajax nutzen</label>
 		</div>
 		
+		<div class="text-center">
+			<a sec:authorize="isAnonymous()" href="/login">Login</a>
+			<a sec:authorize="isAuthenticated()" href="/logout">Logout</a>
+		</div>
+		
 		<br />
 
 		<div id="entries" class="mx-auto">			
 			<div th:each="entry, it : ${entries}" th:with="index = ${it.count}">
 				<div class="card" th:fragment="entry" th:id="entry+${entry.id}">
 					<div class="card-header">
-						<form th:method="delete" th:action="@{/guestbook/} + ${entry.id}" th:attr="data-entry-id=${entry.id}">
-							<button class="btn btn-sm float-right" >
+						<form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/guestbook/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
+							<button th:title="#{guestbook.form.delete}" class="btn btn-sm float-right">
 								<span class="fas fa-times"></span>
 							</button>
 						</form>
