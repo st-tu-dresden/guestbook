@@ -51,8 +51,8 @@ $(document).ready(function() {
 
 				$('#entry' + id).slideUp(500, function() {
 					var followingEntries = $(this).parent().nextAll().each(function() {
-						var textArray = $(this).find('h3').text().split('.', 2);
-						$(this).find('h3').text((parseInt(textArray[0],10)-1) + '.' + textArray[1]);
+						var textArray = $(this).find('h4').text().split('.', 2);
+						$(this).find('h4').text((parseInt(textArray[0],10)-1) + '.' + textArray[1]);
 					});
 
 					$(this).parent().remove();
