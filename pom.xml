@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>font-awesome</artifactId>
-			<version>5.7.2</version>
+			<version>5.8.1</version>
 			<scope>runtime</scope>
 		</dependency>
 
