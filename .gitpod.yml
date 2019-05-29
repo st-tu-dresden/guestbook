@@ -1,0 +1,10 @@
+image:
+    file: .gitpod.dockerfile
+ports:
+    - port: 8080
+      onOpen: open-preview
+tasks:
+    - init: |
+        ./mvnw clean package
+      command: |
+        ./mvnw spring-boot:run
