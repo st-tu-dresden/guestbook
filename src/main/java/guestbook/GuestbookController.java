@@ -15,9 +15,12 @@
  */
 package guestbook;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * A controller to handle web requests to manage {@link GuestbookEntry}s
@@ -130,16 +134,19 @@ class GuestbookController {
 	 * Deletes a {@link GuestbookEntry}. Note how the path variable used in the {@link RequestMapping} annotation is bound
 	 * to the controller method using the {@link PathVariable} annotation.
 	 *
-	 * @param id the id of the {@link GuestbookEntry} to delete.
+	 * @param entry the id of the {@link GuestbookEntry} to delete.
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping(path = "/guestbook/{id}")
-	String removeEntry(@PathVariable Long id) {
+	@DeleteMapping(path = "/guestbook/{entry}")
+	String removeEntry(@PathVariable Optional<GuestbookEntry> entry) {
 
-		guestbook.deleteById(id);
+		return entry.map(it -> {
 
-		return "redirect:/guestbook";
+			guestbook.delete(it);
+			return "redirect:/guestbook";
+
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
 	/**
@@ -149,14 +156,14 @@ class GuestbookController {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping(path = "/guestbook/{id}", headers = IS_AJAX_HEADER)
-	HttpEntity<?> removeEntryJS(@PathVariable Long id) {
+	@DeleteMapping(path = "/guestbook/{entry}", headers = IS_AJAX_HEADER)
+	HttpEntity<?> removeEntryJS(@PathVariable Optional<GuestbookEntry> entry) {
 
-		return guestbook.findById(id).map(e -> {
+		return entry.map(it -> {
 
-			guestbook.deleteById(e.getId());
+			guestbook.delete(it);
 			return ResponseEntity.ok().build();
 
-		}).orElse(ResponseEntity.notFound().build());
+		}).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 }
