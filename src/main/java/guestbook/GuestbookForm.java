@@ -21,6 +21,8 @@ import javax.validation.constraints.NotBlank;
  * Type to bind request payloads and make them available in the controller. In contrast to {@link GuestbookEntry} it is
  * particularly designed to also be able to capture invalid input, so that the raw form data can be bound and validated
  * against business constraints using code and / or annotations.
+ * <p>
+ * Note how the fields are annotated with the {@link NotBlank} annotation, which tells Spring how to validate the values.
  *
  * @author Oliver Gierke
  * @see GuestbookController#addEntry(GuestbookForm, org.springframework.validation.Errors, org.springframework.ui.Model)
@@ -37,8 +39,8 @@ class GuestbookForm {
 	 * The constructor needs to be public so that Spring will actually consider it for form data binding until
 	 * {@link https://github.com/spring-projects/spring-framework/issues/22600} is resolved.
 	 *
-	 * @param name
-	 * @param text
+	 * @param name the value to bind to {@code name}
+	 * @param text the value to bind to {@code text}
 	 */
 	public GuestbookForm(String name, String text) {
 
@@ -51,7 +53,7 @@ class GuestbookForm {
 	 * actually consider it for form data binding until
 	 * {@link https://github.com/spring-projects/spring-framework/issues/22600} is resolved.
 	 *
-	 * @return
+	 * @return the value bound to {@code name}
 	 */
 	public String getName() {
 		return name;
@@ -62,7 +64,7 @@ class GuestbookForm {
 	 * actually consider it for form data binding until
 	 * {@link https://github.com/spring-projects/spring-framework/issues/22600} is resolved.
 	 *
-	 * @return
+	 * @return the value bound to {@code text}
 	 */
 	public String getText() {
 		return text;
@@ -71,7 +73,7 @@ class GuestbookForm {
 	/**
 	 * Returns a new {@link GuestbookEntry} using the data submitted in the request.
 	 *
-	 * @return
+	 * @return the newly created {@link GuestbookEntry}
 	 * @throws IllegalArgumentException if you call this on an instance without the name and text actually set.
 	 */
 	GuestbookEntry toNewEntry() {

@@ -32,8 +32,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
@@ -54,7 +52,7 @@ class GuestbookController {
 	 * Creates a new {@link GuestbookController} using the given {@link GuestbookRepository}. Spring will look for a bean
 	 * of type {@link GuestbookRepository} and hand this into this class when an instance is created.
 	 *
-	 * @param guestbook must not be {@literal null}.
+	 * @param guestbook must not be {@literal null}
 	 */
 	public GuestbookController(GuestbookRepository guestbook) {
 
@@ -66,7 +64,7 @@ class GuestbookController {
 	 * Handles requests to the application root URI. Note, that you can use {@code redirect:} as prefix to trigger a
 	 * browser redirect instead of simply rendering a view.
 	 *
-	 * @return
+	 * @return a redirect string
 	 */
 	@GetMapping(path = "/")
 	String index() {
@@ -77,7 +75,9 @@ class GuestbookController {
 	 * Handles requests to access the guestbook. Obtains all currently available {@link GuestbookEntry}s and puts them
 	 * into the {@link Model} that's used to render the view.
 	 *
-	 * @return
+	 * @param model the model that's used to render the view
+	 * @param form the form to be added to the model
+	 * @return a view name
 	 */
 	@GetMapping(path = "/guestbook")
 	String guestBook(Model model, @ModelAttribute(binding = false) GuestbookForm form) {
@@ -89,16 +89,14 @@ class GuestbookController {
 	}
 
 	/**
-	 * Handles requests to create a new {@link GuestbookEntry}. Uses the fields {@code name} and {@code text} from the
-	 * HTML form via the {@link RequestParam} annotations. The mapping also supports other types than {@link String}, see
-	 * {@link #removeEntry(Long)}.
-	 * <p>
-	 * For the sake of simplicity we don't do any validation here. Spring has support for that kind of stuff but we leave
-	 * that for the VideoShop example to cover.
+	 * Handles requests to create a new {@link GuestbookEntry}. Spring MVC automatically validates and binds the
+	 * HTML form to the {@code form} parameter. Validation or binding errors, if any, are exposed via the {@code
+	 * errors} parameter.
 	 *
-	 * @param name the name of the person that made the entry
-	 * @param text the actual text of the entry
-	 * @return
+	 * @param form the form submitted by the user
+	 * @param errors an object that stores any form validation or data binding errors
+	 * @param model the model that's used to render the view
+	 * @return a redirect string
 	 */
 	@PostMapping(path = "/guestbook")
 	String addEntry(@Valid @ModelAttribute("form") GuestbookForm form, Errors errors, Model model) {
@@ -113,12 +111,15 @@ class GuestbookController {
 	}
 
 	/**
-	 * Handles AJAX requests to create a new {@link GuestbookEntry}.
+	 * Handles AJAX requests to create a new {@link GuestbookEntry}. Instead of rendering a complete page,
+	 * this view only renders and returns the HTML fragment representing the newly created entry.
+	 * <p>
+	 * Note that we do not react explicitly to a validation error: in such a case, Spring automatically
+	 * returns an appropriate JSON document describing the error.
 	 *
-	 * @param name the name of the person that made the entry
-	 * @param text the actual text of the entry
-	 * @param model
-	 * @return
+	 * @param form the form submitted by the user
+	 * @param model the model that's used to render the view
+	 * @return a reference to a Thymeleaf template fragment
 	 * @see #addEntry(String, String)
 	 */
 	@PostMapping(path = "/guestbook", headers = IS_AJAX_HEADER)
@@ -131,11 +132,13 @@ class GuestbookController {
 	}
 
 	/**
-	 * Deletes a {@link GuestbookEntry}. Note how the path variable used in the {@link RequestMapping} annotation is bound
-	 * to the controller method using the {@link PathVariable} annotation.
+	 * Deletes a {@link GuestbookEntry}. This request can only be performed by authenticated users with
+	 * admin privileges. Also note how the path variable used in the {@link DeleteMapping} annotation is bound
+	 * to an {@link Optional} parameter of the controller method using the {@link PathVariable} annotation.
+	 * If the entry couldn't be found, that {@link Optional} will be empty.
 	 *
-	 * @param entry the id of the {@link GuestbookEntry} to delete.
-	 * @return
+	 * @param entry an {@link Optional} with the {@link GuestbookEntry} to delete
+	 * @return a redirect string
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(path = "/guestbook/{entry}")
@@ -150,10 +153,11 @@ class GuestbookController {
 	}
 
 	/**
-	 * Handles AJAX requests to delete {@link GuestbookEntry}s.
+	 * Handles AJAX requests to delete {@link GuestbookEntry}s. Otherwise, this method is similar
+	 * to {@link #removeEntry(Optional)}.
 	 *
-	 * @param id the id of the {@link GuestbookEntry} to delete.
-	 * @return
+	 * @param entry an {@link Optional} with the {@link GuestbookEntry} to delete
+	 * @return a response entity indicating success or failure of the removal
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(path = "/guestbook/{entry}", headers = IS_AJAX_HEADER)

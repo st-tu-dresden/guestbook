@@ -28,7 +28,7 @@ import org.springframework.util.Assert;
  *
  * @author Paul Henke
  * @author Oliver Gierke
- * @see http://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks_of_DDD
+ * @see https://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks
  */
 @Entity
 class GuestbookEntry {
@@ -40,8 +40,8 @@ class GuestbookEntry {
 	/**
 	 * Creates a new {@link GuestbookEntry} for the given name and text.
 	 *
-	 * @param name must not be {@literal null} or empty.
-	 * @param text must not be {@literal null} or empty;
+	 * @param name must not be {@literal null} or empty
+	 * @param text must not be {@literal null} or empty
 	 */
 	public GuestbookEntry(String name, String text) {
 

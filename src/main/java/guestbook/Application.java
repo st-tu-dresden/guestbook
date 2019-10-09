@@ -19,10 +19,8 @@ import java.util.stream.Stream;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,10 +29,10 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * The core class to bootstrap our application. It trigger the auto-configuration of the Spring Container (see
- * {@link EnableAutoConfiguration}) and activates component-scanning (see {@link ComponentScan}). At the same time the
- * class acts as configuration class to configure additional components (see {@link #init(GuestbookRepository)}) that
- * the container will take into account when bootstrapping.
+ * The core class to bootstrap our application. It triggers Spring Boot's auto-configuration, component scanning and
+ * configuration properties scanning using the {@link SpringBootApplication} convenience annotation. At the same time,
+ * this class acts as configuration class to configure additional components (see {@link #init(GuestbookRepository)}) that
+ * the Spring container will take into account when bootstrapping.
  *
  * @author Paul Henke
  * @author Oliver Gierke
@@ -52,7 +50,7 @@ public class Application {
 	}
 
 	/**
-	 * Some initializing code to pre-fill our database with {@link GuestbookEntry}. Beans of type
+	 * Some initializing code to populate our database with some {@link GuestbookEntry}s. Beans of type
 	 * {@link CommandLineRunner} will be executed on application startup which makes them a convenient way to run
 	 * initialization code.
 	 */
@@ -71,6 +69,10 @@ public class Application {
 		};
 	}
 
+	/**
+	 * This class customizes the web and web security configuration through callback methods provided by the
+	 * {@link WebMvcConfigurer} interface.
+	 */
 	@Configuration
 	@EnableGlobalMethodSecurity(prePostEnabled = true)
 	static class SecurityConfiguration extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
