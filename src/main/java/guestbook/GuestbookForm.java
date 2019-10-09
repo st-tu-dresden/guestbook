@@ -24,7 +24,7 @@ import javax.validation.constraints.NotBlank;
  * <p>
  * Note how the fields are annotated with the {@link NotBlank} annotation, which tells Spring how to validate the values.
  *
- * @author Oliver Gierke
+ * @author Oliver Drotbohm
  * @see GuestbookController#addEntry(GuestbookForm, org.springframework.validation.Errors, org.springframework.ui.Model)
  */
 class GuestbookForm {

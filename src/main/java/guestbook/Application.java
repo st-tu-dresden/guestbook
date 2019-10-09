@@ -35,7 +35,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * the Spring container will take into account when bootstrapping.
  *
  * @author Paul Henke
- * @author Oliver Gierke
+ * @author Oliver Drotbohm
  */
 @SpringBootApplication
 public class Application {

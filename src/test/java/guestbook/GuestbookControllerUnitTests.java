@@ -29,7 +29,7 @@ import org.springframework.ui.Model;
 /**
  * Unit tests for {@link GuestbookController}.
  *
- * @author Oliver Gierke
+ * @author Oliver Drotbohm
  */
 @ExtendWith(MockitoExtension.class)
 class GuestbookControllerUnitTests {

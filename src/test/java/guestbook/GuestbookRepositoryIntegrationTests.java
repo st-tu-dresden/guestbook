@@ -30,7 +30,7 @@ import org.springframework.data.domain.Sort;
  * Bootstraps the application using the {@link Application} configuration class. Enables transaction rollbacks after
  * test methods using the {@link Transactional} annotation.
  *
- * @author Oliver Gierke
+ * @author Oliver Drotbohm
  * @author Paul Henke
  */
 @SpringBootTest

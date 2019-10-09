@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests for {@link GuestbookEntry}.
  *
- * @author Oliver Gierke
+ * @author Oliver Drotbohm
  */
 class GuestbookEntryUnitTests {
 

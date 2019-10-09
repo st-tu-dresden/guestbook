@@ -38,7 +38,7 @@ import org.springframework.web.server.ResponseStatusException;
  * A controller to handle web requests to manage {@link GuestbookEntry}s
  *
  * @author Paul Henke
- * @author Oliver Gierke
+ * @author Oliver Drotbohm
  */
 @Controller
 class GuestbookController {

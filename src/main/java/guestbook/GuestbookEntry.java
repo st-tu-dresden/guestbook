@@ -27,7 +27,7 @@ import org.springframework.util.Assert;
  * A guestbook entry. An entity as in the Domain Driven Design context. Mapped onto the database using JPA annotations.
  *
  * @author Paul Henke
- * @author Oliver Gierke
+ * @author Oliver Drotbohm
  * @see https://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks
  */
 @Entity
