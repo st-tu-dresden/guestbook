@@ -8,7 +8,7 @@ Purpose of this sample project is to make students familiar with basic technolog
 ## Quickstart
 
 NOTE: The Quickstart requires Java 11, and a recent Git (2.21 or better preferred) to be available on your machine. If you miss any of those go through the steps described in <<prerequisites>>.
-Also, note that you have to run `mvnw.bat` instead of `./mvnw` if you run Windows by accident.
+Also, note that you have to run `mvnw.cmd` instead of `./mvnw` if you run Windows by accident.
 
 [source, shell]
 ----
