@@ -34,6 +34,18 @@ OpenJDK Runtime Environment AdoptOpenJDK (build 11.0.4+11)
 OpenJDK 64-Bit Server VM AdoptOpenJDK (build 11.0.4+11, mixed mode)
 ----
 
+Make sure that Maven picks up the same JDK version:
+
+[source, bash]
+----
+$ ./mvnw --version
+Apache Maven 3.6.1 (d66c9c0b3152b2e69ee9bac180bb8fcc8e6af555; 2019-04-04T21:00:29+02:00)
+Maven home: /Users/JavaJoe/.m2/wrapper/dists/apache-maven-3.6.1-bin/38pn40mp89t5c94bjdbeod370m/apache-maven-3.6.1
+Java version: 11.0.4, vendor: AdoptOpenJDK, runtime: /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
+Default locale: de_DE, platform encoding: UTF-8
+OS name: "mac os x", version: "10.14.6", arch: "x86_64", family: "mac"
+----
+
 ### Git
 
 http://git-scm.com/download[Download] the binaries, run the installer. Verify the command line shows something like this after install:
