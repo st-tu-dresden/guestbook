@@ -1,10 +1,10 @@
-image:
-    file: .gitpod.dockerfile
 ports:
-    - port: 8080
-      onOpen: open-preview
+  - port: 8080
+    onOpen: open-preview
 tasks:
-    - init: |
-        ./mvnw clean package
-      command: |
-        ./mvnw spring-boot:run
+  - init: ./mvnw clean verify
+    command: ./mvnw spring-boot:run
+vscode:
+  extensions:
+    - Pivotal.vscode-spring-boot@1.23.0:1iLvjTfznJrV611qRUeOHg==
+    - vscjava.vscode-java-test@0.24.2:K9XH858+UGOKjfN3qRW15Q==
