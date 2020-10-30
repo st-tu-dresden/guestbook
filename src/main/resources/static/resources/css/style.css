@@ -7,6 +7,60 @@ div#entries, #form {
 	margin-bottom: 2em;
 }
 
+.card.red {
+	border-color: #DF6A68;
+}
+
+.card-footer.red {
+	border-color: #DF6A68;
+	background-color: #E68B89;
+}
+
+.card-body.red {
+	background-color: #F1BDBC;
+}
+
+.card-header.red {
+	border-color: #DF6A68;
+	background-color: #E68B89;
+}
+
+.card.blue {
+	border-color: #6586CD;
+}
+
+.card-footer.blue {
+	border-color: #6586CD;
+	background-color: #93AADC;
+}
+
+.card-body.blue {
+	background-color: #B2C2E6;
+}
+
+.card-header.blue {
+	border-color: #6586CD;
+	background-color: #93AADC;
+}
+
+.card.green {
+	border-color: #2FC64A;
+}
+
+.card-footer.green {
+	border-color: #2FC64A;
+	background-color: #84E296;
+}
+
+.card-body.green {
+	background-color: #ACECB8;
+}
+
+.card-header.green {
+	border-color: #2FC64A;
+	background-color: #84E296;
+}
+
 .card-title {
 	margin-bottom: 0;
 }
@@ -21,4 +75,53 @@ blockquote {
 
 form#form {
 	padding: 0 1.25em;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: row;
+}
+
+.radio {
+	cursor: pointer;
+	display: flex;
+	margin-right: 16px;
+}
+
+.radio input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+input:checked + .radio__control.red {
+	background-color: #E68B89;
+}
+
+input:checked + .radio__control.blue {
+	background-color: #93AADC;
+}
+
+input:checked + .radio__control.green {
+	background-color: #84E296;
+}
+
+.radio__control {
+	display: block;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	border: 8px solid;
+}
+
+.radio__control.red {
+	border-color: #E68B89;
+}
+
+.radio__control.blue {
+	border-color: #93AADC;
+}
+
+.radio__control.green {
+	border-color: #84E296;
 }

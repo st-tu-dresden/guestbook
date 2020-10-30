@@ -27,8 +27,8 @@
 
 		<div id="entries" class="mx-auto">			
 			<div th:each="entry, it : ${entries}" th:with="index = ${it.count}">
-				<div class="card" th:fragment="entry" th:id="entry+${entry.id}">
-					<div class="card-header">
+				<div th:class="'card ' + ${entry.color}" th:fragment="entry" th:id="entry+${entry.id}">
+					<div th:class="'card-header ' + ${entry.color}">
 						<form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/guestbook/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
 							<button th:title="#{guestbook.form.delete}" class="btn btn-sm float-right">
 								<span class="fas fa-times"></span>
@@ -36,10 +36,10 @@
 						</form>
 						<h4 th:text="${index} + '. ' + ${entry.name}" class="card-title">1. Posting</h4>
 					</div>
-					<div class="card-body">
+					<div th:class="'card-body ' + ${entry.color}">
 						<blockquote class="entrytext" th:text="${entry.text}"></blockquote>
 					</div>
-					<div class="card-footer">
+					<div th:class="'card-footer ' + ${entry.color}">
 						<footer class="date" th:text="${#temporals.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
 					</div>
 				</div>
@@ -57,6 +57,25 @@
 				<label for="text" th:text="#{guestbook.form.text}">Text</label><br /> 
 				<textarea th:field="*{text}" th:errorclass="is-invalid" class="form-control" required="required"></textarea>
 				<div th:if="${#fields.hasErrors('text')}" class="invalid-feedback" th:text="#{guestbook.form.text.required}">Please provide a text.</div>
+			</div>
+			<div class="form-group">
+				<label for="color" th:text="#{guestbook.form.color}">Farbe</label>
+				<div class="wrapper">
+					<label class="radio">
+						<input type="radio" value="red" name="color" checked>
+						<div class="radio__control red"></div>
+					</label>
+
+					<label class="radio">
+						<input type="radio" value="blue" name="color">
+						<div class="radio__control blue"></div>
+					</label>
+
+					<label class="radio">
+						<input type="radio" value="green" name="color">
+						<div class="radio__control green"></div>
+					</label>
+				</div>
 			</div>
 			<input type="submit" class="btn btn-secondary" th:value="#{guestbook.form.submit}" value="Senden" />
 		</form>
