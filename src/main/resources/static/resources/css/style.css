@@ -13,7 +13,7 @@ div#entries, #form {
 
 .card-footer.red {
 	border-color: #DF6A68;
-	background-color: #E68B89;
+	background-color: #EA9B9A;
 }
 
 .card-body.red {
@@ -22,7 +22,7 @@ div#entries, #form {
 
 .card-header.red {
 	border-color: #DF6A68;
-	background-color: #E68B89;
+	background-color: #EA9B9A;
 }
 
 .card.blue {
@@ -95,7 +95,7 @@ form#form {
 }
 
 input:checked + .radio__control.red {
-	background-color: #E68B89;
+	background-color: #EA9B9A;
 }
 
 input:checked + .radio__control.blue {
@@ -115,7 +115,7 @@ input:checked + .radio__control.green {
 }
 
 .radio__control.red {
-	border-color: #E68B89;
+	border-color: #EA9B9A;
 }
 
 .radio__control.blue {
