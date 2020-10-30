@@ -31,6 +31,7 @@ class GuestbookForm {
 
 	private final @NotBlank String name;
 	private final @NotBlank String text;
+	private final @NotBlank String color;
 
 	/**
 	 * Creates a new {@link GuestbookForm} with the given name and text. Spring Framework will use this constructor to
@@ -42,10 +43,11 @@ class GuestbookForm {
 	 * @param name the value to bind to {@code name}
 	 * @param text the value to bind to {@code text}
 	 */
-	public GuestbookForm(String name, String text) {
+	public GuestbookForm(String name, String text, String color) {
 
 		this.name = name;
 		this.text = text;
+		this.color = color;
 	}
 
 	/**
@@ -71,12 +73,23 @@ class GuestbookForm {
 	}
 
 	/**
+	 * Returns the value bound to the {@code color} attribute of the request. Needs to be public so that Spring will
+	 * actually consider it for form data binding until
+	 * {@link https://github.com/spring-projects/spring-framework/issues/22600} is resolved.
+	 *
+	 * @return the value bound to {@code color}
+	 */
+	public String getColor() {
+		return color;
+	}
+
+	/**
 	 * Returns a new {@link GuestbookEntry} using the data submitted in the request.
 	 *
 	 * @return the newly created {@link GuestbookEntry}
 	 * @throws IllegalArgumentException if you call this on an instance without the name and text actually set.
 	 */
 	GuestbookEntry toNewEntry() {
-		return new GuestbookEntry(getName(), getText());
+		return new GuestbookEntry(getName(), getText(), getColor());
 	}
 }

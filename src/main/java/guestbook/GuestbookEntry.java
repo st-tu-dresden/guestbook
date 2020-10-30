@@ -34,7 +34,7 @@ import org.springframework.util.Assert;
 class GuestbookEntry {
 
 	private @Id @GeneratedValue Long id;
-	private final String name, text;
+	private final String name, text, color;
 	private final LocalDateTime date;
 
 	/**
@@ -43,13 +43,15 @@ class GuestbookEntry {
 	 * @param name must not be {@literal null} or empty
 	 * @param text must not be {@literal null} or empty
 	 */
-	public GuestbookEntry(String name, String text) {
+	public GuestbookEntry(String name, String text, String color) {
 
 		Assert.hasText(name, "Name must not be null or empty!");
 		Assert.hasText(text, "Text must not be null or empty!");
+		Assert.hasText(color, "Color must not be null or empty!");
 
 		this.name = name;
 		this.text = text;
+		this.color = color;
 		this.date = LocalDateTime.now();
 	}
 
@@ -57,6 +59,7 @@ class GuestbookEntry {
 	private GuestbookEntry() {
 		this.name = null;
 		this.text = null;
+		this.color = null;
 		this.date = null;
 	}
 
@@ -74,5 +77,9 @@ class GuestbookEntry {
 
 	public String getText() {
 		return text;
+	}
+
+	public String getColor() {
+		return color;
 	}
 }
