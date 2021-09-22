@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 the original author or authors.
+ * Copyright 2014-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ class GuestbookController {
 	 *
 	 * @param guestbook must not be {@literal null}
 	 */
-	public GuestbookController(GuestbookRepository guestbook) {
+	GuestbookController(GuestbookRepository guestbook) {
 
 		Assert.notNull(guestbook, "Guestbook must not be null!");
 		this.guestbook = guestbook;
@@ -89,8 +89,8 @@ class GuestbookController {
 	}
 
 	/**
-	 * Handles requests to create a new {@link GuestbookEntry}. Spring MVC automatically validates and binds the
-	 * HTML form to the {@code form} parameter. Validation or binding errors, if any, are exposed via the {@code
+	 * Handles requests to create a new {@link GuestbookEntry}. Spring MVC automatically validates and binds the HTML form
+	 * to the {@code form} parameter. Validation or binding errors, if any, are exposed via the {@code
 	 * errors} parameter.
 	 *
 	 * @param form the form submitted by the user
@@ -111,11 +111,11 @@ class GuestbookController {
 	}
 
 	/**
-	 * Handles AJAX requests to create a new {@link GuestbookEntry}. Instead of rendering a complete page,
-	 * this view only renders and returns the HTML fragment representing the newly created entry.
+	 * Handles AJAX requests to create a new {@link GuestbookEntry}. Instead of rendering a complete page, this view only
+	 * renders and returns the HTML fragment representing the newly created entry.
 	 * <p>
-	 * Note that we do not react explicitly to a validation error: in such a case, Spring automatically
-	 * returns an appropriate JSON document describing the error.
+	 * Note that we do not react explicitly to a validation error: in such a case, Spring automatically returns an
+	 * appropriate JSON document describing the error.
 	 *
 	 * @param form the form submitted by the user
 	 * @param model the model that's used to render the view
@@ -132,10 +132,10 @@ class GuestbookController {
 	}
 
 	/**
-	 * Deletes a {@link GuestbookEntry}. This request can only be performed by authenticated users with
-	 * admin privileges. Also note how the path variable used in the {@link DeleteMapping} annotation is bound
-	 * to an {@link Optional} parameter of the controller method using the {@link PathVariable} annotation.
-	 * If the entry couldn't be found, that {@link Optional} will be empty.
+	 * Deletes a {@link GuestbookEntry}. This request can only be performed by authenticated users with admin privileges.
+	 * Also note how the path variable used in the {@link DeleteMapping} annotation is bound to an {@link Optional}
+	 * parameter of the controller method using the {@link PathVariable} annotation. If the entry couldn't be found, that
+	 * {@link Optional} will be empty.
 	 *
 	 * @param entry an {@link Optional} with the {@link GuestbookEntry} to delete
 	 * @return a redirect string
@@ -153,8 +153,8 @@ class GuestbookController {
 	}
 
 	/**
-	 * Handles AJAX requests to delete {@link GuestbookEntry}s. Otherwise, this method is similar
-	 * to {@link #removeEntry(Optional)}.
+	 * Handles AJAX requests to delete {@link GuestbookEntry}s. Otherwise, this method is similar to
+	 * {@link #removeEntry(Optional)}.
 	 *
 	 * @param entry an {@link Optional} with the {@link GuestbookEntry} to delete
 	 * @return a response entity indicating success or failure of the removal
