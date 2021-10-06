@@ -70,11 +70,28 @@ git version 2.29.1
 
 == IDE Setup
 
-Grab the latest https://spring.io/tools[STS] (Spring Tool Suite, plain Eclipse or IntelliJ should work as well), run installer or unzip and run it.
+=== Eclipse
+
+Grab the latest https://spring.io/tools[Spring Tool Suite] (plain Eclipse should work as well), run installer or unzip and run it.
 
 Select menu:File[Import], select menu:Maven[Existing Maven Projects], select the folder you checked the project out into and hit btn:[Finish]. This will import the project into your workspace.
 
 In the Console view you might wanna click the btn:[Open Console] button and select Maven Console to see that Maven is downloading dependencies, sources and Javadocs.
+
+=== IntelliJ
+
+Grab the latest https://www.jetbrains.com/idea/download/[IntelliJ IDEA IDE] (both Community Edition and Ultimate Edition will work), install it according to the instructions on their website and run it.
+
+From the Welcome Screen, select btn:[Import Project]. Otherwise, if you've already opened another project, you'll need to select menu:File[New > Project from existing sources].
+Now, navigate to the folder you checked the project out into, select the `pom.xml` file and hit btn:[Open].
+
+In the opened wizard, additionally select the checkboxes btn:[Import Maven projects automatically], as well as the btn:[Sources] and btn:[Documentation] checkboxes next to btn:[Automically download] and hit btn:[Next].
+On the next page, do not select any profile and hit btn:[Next]. Now, ensure the Maven project is selected for import and hit btn:[Next].
+On the following page, ensure you've selected a 1.8 or higher JDK and hit btn:[Next].
+On the final page, leave the suggested project name as is and hit btn:[Finish].
+
+Now you have to wait a bit while IntelliJ and Maven work on importing the project, which includes downloading all required dependencies from the internet.
+All IDE activities are displayed in the status bar.
 
 == Technology stack
 
