@@ -2,6 +2,7 @@
 :experimental:
 
 image:https://github.com/st-tu-dresden/guestbook/workflows/Build%20Maven%20artifacts/badge.svg["Build Status", link="https://github.com/st-tu-dresden/guestbook/actions?query=workflow%3A%22Build+Maven+artifacts%22"]
+image:https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod["Gitpod ready-to-code", link="https://gitpod.io/#https://github.com/st-tu-dresden/guestbook"]
 
 Purpose of this sample project is to make students familiar with basic technologies they're going to use during the Software Engineering Lab at Technical University of Dresden.
 
