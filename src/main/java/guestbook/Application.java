@@ -24,15 +24,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * The core class to bootstrap our application. It triggers Spring Boot's auto-configuration, component scanning and
  * configuration properties scanning using the {@link SpringBootApplication} convenience annotation. At the same time,
- * this class acts as configuration class to configure additional components (see {@link #init(GuestbookRepository)}) that
- * the Spring container will take into account when bootstrapping.
+ * this class acts as configuration class to configure additional components (see {@link #init(GuestbookRepository)})
+ * that the Spring container will take into account when bootstrapping.
  *
  * @author Paul Henke
  * @author Oliver Drotbohm
@@ -62,7 +62,8 @@ public class Application {
 			Stream.of( //
 					new GuestbookEntry("H4xx0r", "first!!!"), //
 					new GuestbookEntry("Arni", "Hasta la vista, baby"), //
-					new GuestbookEntry("Duke Nukem", "It's time to kick ass and chew bubble gum. And I'm all out of gum."), //
+					new GuestbookEntry("Duke Nukem",
+							"It's time to kick ass and chew bubble gum. And I'm all out of gum."), //
 					new GuestbookEntry("Gump1337",
 							"Mama always said life was like a box of chocolates. You never know what you're gonna get.")) //
 					.forEach(guestbook::save);
@@ -75,7 +76,7 @@ public class Application {
 	 */
 	@Configuration
 	@EnableGlobalMethodSecurity(prePostEnabled = true)
-	static class SecurityConfiguration extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+	static class SecurityConfiguration implements WebMvcConfigurer {
 
 		/*
 		 * (non-Javadoc)
@@ -88,12 +89,8 @@ public class Application {
 			registry.addViewController("/login").setViewName("login");
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * @see org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter#configure(org.springframework.security.config.annotation.web.builders.HttpSecurity)
-		 */
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
+		@Bean
+		public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 			http.csrf().disable();
 
@@ -101,6 +98,8 @@ public class Application {
 			http.authorizeRequests().anyRequest().permitAll() //
 					.and().formLogin() //
 					.and().logout().logoutSuccessUrl("/").clearAuthentication(true);
+
+			return http.build();
 		}
 	}
 }

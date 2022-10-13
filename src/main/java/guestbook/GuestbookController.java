@@ -17,7 +17,7 @@ package guestbook;
 
 import java.util.Optional;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
