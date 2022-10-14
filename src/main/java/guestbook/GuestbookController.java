@@ -170,4 +170,17 @@ class GuestbookController {
 
 		}).orElseGet(() -> ResponseEntity.notFound().build());
 	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping(path = "/guestbook/hide/{entry}")
+	String hideEntry(@PathVariable Optional<GuestbookEntry> entry) {
+
+		return entry.map(it -> {
+
+			it.toggleHidden();
+			guestbook.save(it);
+			return "redirect:/guestbook";
+
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+	}
 }

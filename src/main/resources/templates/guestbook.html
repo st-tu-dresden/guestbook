@@ -34,9 +34,14 @@
 								<span class="fas fa-times"></span>
 							</button>
 						</form>
+						<form sec:authorize="hasRole('ADMIN')" th:method="post" th:action="@{/guestbook/hide/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
+							<button th:title="${entry.hidden} ? 'show' : 'hide'" class="btn btn-sm float-right">
+								<span th:text="${entry.hidden} ? 'show' : 'hide'"></span>
+							</button>
+						</form>
 						<h4 th:text="${index} + '. ' + ${entry.name}" class="card-title">1. Posting</h4>
 					</div>
-					<div class="card-body">
+					<div class="card-body" th:classappend="${entry.hidden} ? 'hidden': ''">
 						<blockquote class="entrytext" th:text="${entry.text}"></blockquote>
 					</div>
 					<div class="card-footer">

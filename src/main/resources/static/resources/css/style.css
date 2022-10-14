@@ -22,3 +22,7 @@ blockquote {
 form#form {
 	padding: 0 1.25em;
 }
+
+.hidden{
+	filter: blur(7px)
+}
