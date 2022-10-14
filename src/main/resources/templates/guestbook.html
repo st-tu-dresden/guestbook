@@ -1,10 +1,9 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-		<script th:src="@{/resources/js/guestbook.js}"></script>
+		<script th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
+		<script th:src="@{/webjars/hyperscript.org/dist/_hyperscript.min.js}"></script>
 		<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css" />
 		<link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}" type="text/css" />
 		<link rel="stylesheet" th:href="@{/resources/css/style.css}" type="text/css" />
@@ -12,25 +11,22 @@
 	</head>
 	<body>
 		<h1 class="text-center" th:text="#{guestbook.title}">Gästebuch</h1>
-	
-		<div class="checkbox text-center">
-			<input type="checkbox" id="use_ajax" />
-			<label for="use_ajax" th:text="#{guestbook.useajax}">Ajax nutzen</label>
-		</div>
-		
+
 		<div class="text-center">
 			<a sec:authorize="isAnonymous()" href="/login">Login</a>
 			<a sec:authorize="isAuthenticated()" href="/logout">Logout</a>
 		</div>
-		
+
 		<br />
 
 		<div id="entries" class="mx-auto">			
-			<div th:each="entry, it : ${entries}" th:with="index = ${it.count}">
+			<div th:each="entry, it : ${entries}" th:with="index = ${it.count}" th:fragment="entries">
 				<div class="card" th:fragment="entry" th:id="entry+${entry.id}">
 					<div class="card-header">
 						<form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/guestbook/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
-							<button th:title="#{guestbook.form.delete}" class="btn btn-sm float-right">
+							<button th:title="#{guestbook.form.delete}" class="btn btn-sm float-right"
+							        hx:delete="@{/guestbook/{id}(id=${entry.id})}"
+							        hx:target="'#entries'">
 								<span class="fas fa-times"></span>
 							</button>
 						</form>
@@ -46,8 +42,7 @@
 			</div>
 		</div>
 
-	
-		<form method="post" role="form" class="gb-form" id="form" th:action="@{/guestbook}" th:object="${form}">
+		<form method="post" role="form" class="gb-form" id="form" hx:post="@{/guestbook}" hx-target="#entries" hx-swap="beforeend" _="on entryAdded me.reset()" th:action="@{/guestbook}" th:object="${form}">
 			<div class="form-group">
 				<label for="name" th:text="#{guestbook.form.name}">Name</label><br /> 
 				<input class="form-control" type="text" th:field="*{name}" th:errorclass="is-invalid" required="required" />

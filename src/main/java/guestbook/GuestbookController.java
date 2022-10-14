@@ -15,13 +15,13 @@
  */
 package guestbook;
 
-import java.util.Optional;
-
+import io.github.wimdeblauwe.hsbt.mvc.HtmxResponse;
+import io.github.wimdeblauwe.hsbt.mvc.HxRequest;
 import jakarta.validation.Valid;
 
-import org.springframework.http.HttpEntity;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,9 +42,6 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @Controller
 class GuestbookController {
-
-	// A special header sent with each AJAX request
-	private static final String IS_AJAX_HEADER = "X-Requested-With=XMLHttpRequest";
 
 	private final GuestbookRepository guestbook;
 
@@ -111,27 +108,6 @@ class GuestbookController {
 	}
 
 	/**
-	 * Handles AJAX requests to create a new {@link GuestbookEntry}. Instead of rendering a complete page, this view only
-	 * renders and returns the HTML fragment representing the newly created entry.
-	 * <p>
-	 * Note that we do not react explicitly to a validation error: in such a case, Spring automatically returns an
-	 * appropriate JSON document describing the error.
-	 *
-	 * @param form the form submitted by the user
-	 * @param model the model that's used to render the view
-	 * @return a reference to a Thymeleaf template fragment
-	 * @see #addEntry(String, String)
-	 */
-	@PostMapping(path = "/guestbook", headers = IS_AJAX_HEADER)
-	String addEntry(@Valid GuestbookForm form, Model model) {
-
-		model.addAttribute("entry", guestbook.save(form.toNewEntry()));
-		model.addAttribute("index", guestbook.count());
-
-		return "guestbook :: entry";
-	}
-
-	/**
 	 * Deletes a {@link GuestbookEntry}. This request can only be performed by authenticated users with admin privileges.
 	 * Also note how the path variable used in the {@link DeleteMapping} annotation is bound to an {@link Optional}
 	 * parameter of the controller method using the {@link PathVariable} annotation. If the entry couldn't be found, that
@@ -152,22 +128,54 @@ class GuestbookController {
 		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
+	// Request methods answering HTMX requests
+
+	/**
+	 * Handles AJAX requests to create a new {@link GuestbookEntry}. Instead of rendering a complete page, this view only
+	 * renders and returns the HTML fragment representing the newly created entry.
+	 * <p>
+	 * Note that we do not react explicitly to a validation error: in such a case, Spring automatically returns an
+	 * appropriate JSON document describing the error.
+	 *
+	 * @param form the form submitted by the user
+	 * @param model the model that's used to render the view
+	 * @return a reference to a Thymeleaf template fragment
+	 * @see #addEntry(String, String)
+	 */
+	@HxRequest
+	@PostMapping(path = "/guestbook")
+	HtmxResponse addEntry(@Valid GuestbookForm form, Model model) {
+
+		model.addAttribute("entry", guestbook.save(form.toNewEntry()));
+		model.addAttribute("index", guestbook.count());
+
+		return new HtmxResponse()
+				.addTemplate("guestbook :: entry")
+				.addTrigger("eventAdded");
+	}
+
 	/**
 	 * Handles AJAX requests to delete {@link GuestbookEntry}s. Otherwise, this method is similar to
 	 * {@link #removeEntry(Optional)}.
 	 *
 	 * @param entry an {@link Optional} with the {@link GuestbookEntry} to delete
 	 * @return a response entity indicating success or failure of the removal
+	 * @throws ResponseStatusException
 	 */
+	@HxRequest
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping(path = "/guestbook/{entry}", headers = IS_AJAX_HEADER)
-	HttpEntity<?> removeEntryJS(@PathVariable Optional<GuestbookEntry> entry) {
+	@DeleteMapping(path = "/guestbook/{entry}")
+	HtmxResponse removeEntryHtmx(@PathVariable Optional<GuestbookEntry> entry, Model model) {
 
 		return entry.map(it -> {
 
 			guestbook.delete(it);
-			return ResponseEntity.ok().build();
 
-		}).orElseGet(() -> ResponseEntity.notFound().build());
+			model.addAttribute("entries", guestbook.findAll());
+
+			return new HtmxResponse()
+					.addTemplate("guestbook :: entries");
+
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 }
