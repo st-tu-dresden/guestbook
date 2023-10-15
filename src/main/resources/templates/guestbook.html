@@ -19,6 +19,12 @@
 
 		<br />
 
+		<div class="text-center">
+			Number of Posts: <span th:text="${nrOfEntries}"></span>
+		</div>
+
+		<br />
+
 		<div id="entries" class="mx-auto">			
 			<div th:each="entry, it : ${entries}" th:with="index = ${it.count}" th:fragment="entries">
 				<div class="card" th:fragment="entry" th:id="entry+${entry.id}">

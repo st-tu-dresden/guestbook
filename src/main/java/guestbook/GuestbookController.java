@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 
+import guestbook.GuestbookService.*;
+
 /**
  * A controller to handle web requests to manage {@link GuestbookEntry}s
  *
@@ -81,6 +83,7 @@ class GuestbookController {
 
 		model.addAttribute("entries", guestbook.findAll());
 		model.addAttribute("form", form);
+		model.addAttribute("nrOfEntries", GuestbookService.numberOfEntries(guestbook));
 
 		return "guestbook";
 	}
