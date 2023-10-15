@@ -38,8 +38,9 @@ import org.springframework.util.Assert;
 class GuestbookEntry {
 
 	private @Id @GeneratedValue Long id;
-	private final String name, text;
+	private final String name, text, color;
 	private final LocalDateTime date;
+
 
 	/**
 	 * Creates a new {@link GuestbookEntry} for the given name and text.
@@ -47,13 +48,24 @@ class GuestbookEntry {
 	 * @param name must not be {@literal null} or empty
 	 * @param text must not be {@literal null} or empty
 	 */
-	public GuestbookEntry(String name, String text) {
+	public GuestbookEntry(String name, String text, String color) {
 
 		Assert.hasText(name, "Name must not be null or empty!");
 		Assert.hasText(text, "Text must not be null or empty!");
 
 		this.name = name;
 		this.text = text;
+		this.color = color;
+		this.date = LocalDateTime.now();
+	}
+
+	public GuestbookEntry(String name, String text){
+		Assert.hasText(name, "Name must not be null or empty!");
+		Assert.hasText(text, "Text must not be null or empty!");
+
+		this.name = name;
+		this.text = text;
+		this.color = "black";
 		this.date = LocalDateTime.now();
 	}
 
@@ -62,6 +74,7 @@ class GuestbookEntry {
 		this.name = null;
 		this.text = null;
 		this.date = null;
+		this.color = null;
 	}
 
 	public String getName() {
@@ -80,6 +93,10 @@ class GuestbookEntry {
 		return text;
 	}
 
+	public String getColor(){
+		return  color;
+	}
+
 	/**
 	 * Calculates the minutes since this post was uploaded.
 	 *
@@ -88,4 +105,5 @@ class GuestbookEntry {
 	public long getMinutesSincePost(){
 		return Duration.between(date, LocalDateTime.now()).toMinutes();
 	}
+
 }

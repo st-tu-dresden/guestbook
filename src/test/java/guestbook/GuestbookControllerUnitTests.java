@@ -45,7 +45,7 @@ class GuestbookControllerUnitTests {
 		Model model = new ExtendedModelMap();
 
 		GuestbookController controller = new GuestbookController(guestbook);
-		String viewName = controller.guestBook(model, new GuestbookForm(null, null));
+		String viewName = controller.guestBook(model, new GuestbookForm(null, null, null));
 
 		assertThat(viewName).isEqualTo("guestbook");
 		assertThat(model.asMap().get("entries")).isInstanceOf(Iterable.class);
