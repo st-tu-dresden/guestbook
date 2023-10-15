@@ -15,12 +15,16 @@
  */
 package guestbook;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Period;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+import jakarta.persistence.Transient;
 import org.springframework.util.Assert;
 
 /**
@@ -74,5 +78,14 @@ class GuestbookEntry {
 
 	public String getText() {
 		return text;
+	}
+
+	/**
+	 * Calculates the minutes since this post was uploaded.
+	 *
+	 * @return {@code long} - the minutes since the post was uploaded
+	 */
+	public long getMinutesSincePost(){
+		return Duration.between(date, LocalDateTime.now()).toMinutes();
 	}
 }

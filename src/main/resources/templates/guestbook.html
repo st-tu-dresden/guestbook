@@ -43,6 +43,7 @@
 					</div>
 					<div class="card-footer">
 						<footer class="date" th:text="${#temporals.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
+						<footer th:text="'Time since this post: ' + ${entry.getMinutesSincePost()} + ' min'">TimeSincePost</footer>
 					</div>
 				</div>
 			</div>
