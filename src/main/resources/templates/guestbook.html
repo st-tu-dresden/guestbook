@@ -36,7 +36,15 @@
 						<blockquote class="entrytext" th:text="${entry.text}"></blockquote>
 					</div>
 					<div class="card-footer">
-						<footer class="date" th:text="${#temporals.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
+						<div style="display: flex; justify-content: space-between">
+							<footer class="date" th:text="${#temporals.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
+							<label class="like" th:text="#{guestbook.description.like} + ' ' + ${entry.getLikes()}">Likes</label>
+							<form th:align="right" th:method="post" th:action="@{/guestbook/add-like/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
+								<button th:title="#{guestbook.description.add-like}" class="btn-add-like"
+										hx:post="@{/guestbook/add-like/{id}(id=${entry.id})}">LIKE!
+								</button>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>

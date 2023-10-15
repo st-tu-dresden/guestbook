@@ -19,6 +19,8 @@ import io.github.wimdeblauwe.hsbt.mvc.HtmxResponse;
 import io.github.wimdeblauwe.hsbt.mvc.HxRequest;
 import jakarta.validation.Valid;
 
+import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -177,5 +179,22 @@ class GuestbookController {
 					.addTemplate("guestbook :: entries");
 
 		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+	}
+
+	/**
+	 * Handles requests to add one like to entry with given id
+	 *
+	 * @param id the id of entry which should receive one like
+	 */
+	//	@HxRequest
+	@PostMapping(path = "/guestbook/add-like/{id}")
+	HtmxResponse addLike(@PathVariable Long id) {
+		Optional<GuestbookEntry> entry = guestbook.findById(id);
+		if (entry.isEmpty()) throw new NoSuchElementException();
+		entry.get().addLike();
+		guestbook.save(entry.get());
+
+		return new HtmxResponse()
+				.browserRefresh(true);
 	}
 }
