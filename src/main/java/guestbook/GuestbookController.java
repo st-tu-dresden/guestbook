@@ -15,8 +15,8 @@
  */
 package guestbook;
 
-import io.github.wimdeblauwe.hsbt.mvc.HtmxResponse;
-import io.github.wimdeblauwe.hsbt.mvc.HxRequest;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
 
 import java.util.Optional;
@@ -149,9 +149,10 @@ class GuestbookController {
 		model.addAttribute("entry", guestbook.save(form.toNewEntry()));
 		model.addAttribute("index", guestbook.count());
 
-		return new HtmxResponse()
-				.addTemplate("guestbook :: entry")
-				.addTrigger("eventAdded");
+		return new HtmxResponse.Builder()
+				.view("guestbook :: entry")
+				.trigger("eventAdded")
+				.build();
 	}
 
 	/**
@@ -173,8 +174,9 @@ class GuestbookController {
 
 			model.addAttribute("entries", guestbook.findAll());
 
-			return new HtmxResponse()
-					.addTemplate("guestbook :: entries");
+			return new HtmxResponse.Builder()
+					.view("guestbook :: entries")
+					.build();
 
 		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}

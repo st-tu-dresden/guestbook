@@ -22,7 +22,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -75,7 +75,7 @@ public class Application {
 	 * {@link WebMvcConfigurer} interface.
 	 */
 	@Configuration
-	@EnableGlobalMethodSecurity(prePostEnabled = true)
+	@EnableMethodSecurity(prePostEnabled = true)
 	static class SecurityConfiguration implements WebMvcConfigurer {
 
 		/*
@@ -92,12 +92,11 @@ public class Application {
 		@Bean
 		public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-			http.csrf().disable();
-
 			// Allow all requests on the URI level, configure form login.
-			http.authorizeRequests().anyRequest().permitAll() //
-					.and().formLogin() //
-					.and().logout().logoutSuccessUrl("/").clearAuthentication(true);
+			http.csrf(it -> it.disable())
+					.authorizeHttpRequests(it -> it.anyRequest().permitAll())
+					.formLogin(it -> {})
+					.logout(it -> it.logoutSuccessUrl("/").clearAuthentication(true));
 
 			return http.build();
 		}

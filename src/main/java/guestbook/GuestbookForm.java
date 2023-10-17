@@ -22,7 +22,8 @@ import jakarta.validation.constraints.NotBlank;
  * particularly designed to also be able to capture invalid input, so that the raw form data can be bound and validated
  * against business constraints using code and / or annotations.
  * <p>
- * Note how the fields are annotated with the {@link NotBlank} annotation, which tells Spring how to validate the values.
+ * Note how the fields are annotated with the {@link NotBlank} annotation, which tells Spring how to validate the
+ * values.
  *
  * @author Oliver Drotbohm
  * @see GuestbookController#addEntry(GuestbookForm, org.springframework.validation.Errors, org.springframework.ui.Model)
