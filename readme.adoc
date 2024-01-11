@@ -14,7 +14,8 @@ http://gitpod.io/[GitPod] is a cloud IDE that allows you to work with a project 
 
 1. Click https://gitpod.io/#https://github.com/st-tu-dresden/guestbook[this link] to open the project in GitPod.
 2. Wait for the build to finish (see progress in the console view).
-3. Once the website opens in the embedded preview browser, the project is ready to be worked with.
+3. Once the website opens in the embedded preview browser, the project is ready to be worked with. 
+You might need to click on the __Open in browser__ button besides the URL in the embededed preview browser.
 
 === Local machine
 
