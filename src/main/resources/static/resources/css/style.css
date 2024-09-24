@@ -11,6 +11,10 @@ div#entries, #form {
 	margin-bottom: 0;
 }
 
+.entry-text { /* This is the class for the text/entry someone wrote. Customize this to your liking. */
+	margin-top: 0;
+}
+
 .date {
 	font-size: 0.8em;
 }

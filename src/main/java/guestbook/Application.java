@@ -43,7 +43,7 @@ public class Application {
 	/**
 	 * The main application method, bootstraps the Spring container.
 	 *
-	 * @param args
+	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

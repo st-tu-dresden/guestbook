@@ -1,5 +1,6 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		<script th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
@@ -25,15 +26,15 @@
 					<div class="card-header">
 						<form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/guestbook/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
 							<button th:title="#{guestbook.form.delete}" class="btn btn-sm float-right"
-							        hx:delete="@{/guestbook/{id}(id=${entry.id})}"
-							        hx:target="'#entries'">
+							        hx-delete="@{/guestbook/{id}(id=${entry.id})}"
+							        hx-target="'#entries'">
 								<span class="fas fa-times"></span>
 							</button>
 						</form>
 						<h4 th:text="${index} + '. ' + ${entry.name}" class="card-title">1. Posting</h4>
 					</div>
 					<div class="card-body">
-						<blockquote class="entrytext" th:text="${entry.text}"></blockquote>
+						<blockquote class="entry-text" th:text="${entry.text}"></blockquote>
 					</div>
 					<div class="card-footer">
 						<footer class="date" th:text="${#temporals.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
@@ -42,7 +43,8 @@
 			</div>
 		</div>
 
-		<form method="post" role="form" class="gb-form" id="form" hx:post="@{/guestbook}" hx-target="#entries" hx-swap="beforeend" _="on entryAdded me.reset()" th:action="@{/guestbook}" th:object="${form}">
+		<form method="post" role="form" class="gb-form" id="form" hx-post="@{/guestbook}" hx-target="#entries"
+			  hx-swap="beforeend" _="on entryAdded me.reset()" th:action="@{/guestbook}" th:object="${form}">
 			<div class="form-group">
 				<label for="name" th:text="#{guestbook.form.name}">Name</label><br /> 
 				<input class="form-control" type="text" th:field="*{name}" th:errorclass="is-invalid" required="required" />

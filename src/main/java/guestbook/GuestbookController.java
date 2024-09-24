@@ -140,7 +140,7 @@ class GuestbookController {
 	 * @param form the form submitted by the user
 	 * @param model the model that's used to render the view
 	 * @return a reference to a Thymeleaf template fragment
-	 * @see #addEntry(String, String)
+	 * @see #addEntry(GuestbookForm, Errors, Model)
 	 */
 	@HxRequest
 	@PostMapping(path = "/guestbook")
@@ -161,7 +161,7 @@ class GuestbookController {
 	 *
 	 * @param entry an {@link Optional} with the {@link GuestbookEntry} to delete
 	 * @return a response entity indicating success or failure of the removal
-	 * @throws ResponseStatusException
+	 * @throws ResponseStatusException if the entry couldn't be found
 	 */
 	@HxRequest
 	@PreAuthorize("hasRole('ADMIN')")

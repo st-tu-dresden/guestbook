@@ -28,7 +28,8 @@ import org.springframework.util.Assert;
  *
  * @author Paul Henke
  * @author Oliver Drotbohm
- * @see https://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks
+ * @see
+ * <a href="https://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks">(Wikipedia) Domain-Driven-Design </a>
  */
 @Entity
 class GuestbookEntry {

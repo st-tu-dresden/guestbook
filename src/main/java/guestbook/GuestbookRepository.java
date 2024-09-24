@@ -23,8 +23,9 @@ import org.springframework.data.util.Streamable;
  * A repository to manage {@link GuestbookEntry} instances. The methods are dynamically implemented by Spring Data JPA.
  *
  * @author Oliver Drotbohm
- * @see https://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks
- * @see https://spring.io/projects/spring-data-jpa
+ * @see
+ * <a href="https://en.wikipedia.org/wiki/Domain-driven_design#Building_blocks">(Wikipedia) Domain-driven-design</a>
+ * @see <a href="https://spring.io/projects/spring-data-jpa">Spring data jpa</a>
  */
 interface GuestbookRepository extends CrudRepository<GuestbookEntry, Long> {
 
