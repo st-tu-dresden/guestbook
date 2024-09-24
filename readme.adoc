@@ -1,4 +1,4 @@
-# A Sample Java Web-Application
+= A Sample Java Web-Application
 :experimental:
 
 image:https://github.com/st-tu-dresden/guestbook/workflows/Build%20Maven%20artifacts/badge.svg["Build Status", link="https://github.com/st-tu-dresden/guestbook/actions?query=workflow%3A%22Build+Maven+artifacts%22"]
@@ -19,8 +19,9 @@ You might need to click on the __Open in browser__ button besides the URL in the
 
 === Local machine
 
-NOTE: Working on your local machine requires Java 17, and a recent Git (2.21 or better preferred) to be available on your machine.
-If you miss any of those go through the steps described in <<prerequisites>>.
+NOTE: Working on your local machine requires Java 21, and a recent Git (2.21 or better preferred) to be available on
+your machine.
+If you miss any of those go through the steps described in <<Prerequisites>>.
 Also, note that you have to run `mvnw.cmd` instead of `./mvnw` if you run Windows by accident.
 
 [source, shell]
@@ -36,28 +37,31 @@ Note that Spring Boot creates a default user `user` with a random password print
 
 == Prerequisites
 
-=== Java 17
+=== Java 21
 
-https://adoptium.net/temurin/releases/?version=17[Download] the binaries, install. Make sure the console shows something like this:
+https://adoptium.net/temurin/releases/?version=21[Download] the binaries, install.
+Make sure the console shows something like this:
 
 [source, bash]
 ----
 $ java -version
-openjdk version "17.0.4.1" 2022-08-12
-OpenJDK Runtime Environment Temurin-17.0.4.1+1 (build 17.0.4.1+1)
-OpenJDK 64-Bit Server VM Temurin-17.0.4.1+1 (build 17.0.4.1+1, mixed mode)
+openjdk version "21.0.3" 2024-04-16 LTS
+OpenJDK Runtime Environment Temurin-21.0.3+9 (build 21.0.3+9-LTS)
+OpenJDK 64-Bit Server VM Temurin-21.0.3+9 (build 21.0.3+9-LTS, mixed mode, sharing)
+
 ----
 
-Make sure that the wrapped Maven picks up the same JDK version and that the following command shows similar output:
+Make sure that the wrapped Maven picks up the same JDK version and that the following command shows similar output
+(Windows Example):
 
 [source, bash]
 ----
-$ ./mvnw --version
+$ .\mvnw.cmd --version
 Apache Maven 3.8.6 (84538c9988a25aec085021c365c560670ad80f63)
-Maven home: /Users/martin/.m2/wrapper/dists/apache-maven-3.8.6-bin/67568434/apache-maven-3.8.6
-Java version: 17.0.4.1, vendor: Eclipse Adoptium, runtime: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
+Maven home: C:\Users\USER\.m2\wrapper\dists\apache-maven-3.8.6-bin\67568434\apache-maven-3.8.6
+Java version: 21.0.3, vendor: Eclipse Adoptium, runtime: C:\PATH\TO\JDK\jdk-21.0.3.9-hotspot
 Default locale: de_DE, platform encoding: UTF-8
-OS name: "mac os x", version: "12.6", arch: "aarch64", family: "mac"
+OS name: "windows 11", version: "10.0", arch: "amd64", family: "windows"
 ----
 
 === Git
@@ -84,9 +88,16 @@ In the Console view you might wanna click the btn:[Open Console] button and sele
 
 Grab the latest https://www.jetbrains.com/idea/download/[IntelliJ IDEA IDE] (both Community Edition and Ultimate Edition will work), install it according to the instructions on their website and run it.
 
+=== Open from local disk
 From the Welcome Screen, select btn:[Open]. Otherwise, if you've already opened another project, you'll need to select menu:File[Open…].
 Now, navigate to the folder you checked the project out into (it should contain `pom.xml`), select it and hit btn:[Open].
 When asked whether to trust and open the Maven project, proceed with btn:[Trust Project].
+
+=== Open from VCS
+If you want to clone the project from GitHub, you can do so directly from IntelliJ IDEA. T
+From the Welcome Screen, select btn:[Get from VCS]. Otherwise, if you've already opened another project, you'll need to select menu:File[New​][Project from Version Control…​].
+Paste the URL `https://github.com/st-tu-dresden/guestbook' into the URL field, select a directory to clone the project into and hit btn:[Clone].
+When asked whether to open the project, proceed with btn:[Yes].
 
 Now you have to wait a bit while IntelliJ and Maven work on importing the project, which includes downloading all required dependencies from the internet.
 All IDE activities are displayed in the status bar.
@@ -112,7 +123,7 @@ The de-facto standard Java application framework.
 
 === Spring Data JPA
 
-Spring module to easily build data acess layers using JPA 2.2 (Java Persistence API).
+Spring module to easily build data access layers using JPA 2.2 (Jakarta Persistence API).
 
 - https://spring.io/guides?filter=jpa[Getting started guides]
 - https://projects.spring.io/spring-data-jpa[Project home]
@@ -123,3 +134,17 @@ Library to build HTML web views using natural templating.
 
 - https://spring.io/guides/gs/serving-web-content[Getting stared guide]
 - https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html[Tutorial]
+
+=== Semantic UI and Bootstrap
+
+CSS frameworks to build responsive web applications.
+
+- https://semantic-ui.com[Semantic UI]
+- https://getbootstrap.com/docs/5.3/getting-started/introduction/[Bootstrap-5-Documentation]
+
+=== HTMX
+
+Library to build dynamic web applications using HTML and JavaScript (AJAX).
+
+- https://htmx.org[Overview]
+- https://htmx.org/docs[Tutorial-Documentation]
