@@ -148,3 +148,5 @@ Library to build dynamic web applications using HTML and JavaScript (AJAX).
 
 - https://htmx.org[Overview]
 - https://htmx.org/docs[Tutorial-Documentation]
+- Special Thymeleaf dialect to integrate HTMX:
+https://github.com/wimdeblauwe/htmx-spring-boot[Github]

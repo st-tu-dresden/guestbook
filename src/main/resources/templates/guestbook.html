@@ -26,8 +26,9 @@
 					<div class="card-header">
 						<form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/guestbook/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
 							<button th:title="#{guestbook.form.delete}" class="btn btn-sm float-right"
-							        hx-delete="@{/guestbook/{id}(id=${entry.id})}"
-							        hx-target="'#entries'">
+							        hx:delete="@{/guestbook/{id}(id=${entry.id})}" hx-target="#entries">
+									<!-- the ':' is necessary, when Thymeleaf expression is used
+									this dialect is enabled by htmx-spring-boot-thymeleaf dependency in pom-->
 								<span class="fas fa-times"></span>
 							</button>
 						</form>
@@ -43,7 +44,7 @@
 			</div>
 		</div>
 
-		<form method="post" role="form" class="gb-form" id="form" hx-post="@{/guestbook}" hx-target="#entries"
+		<form method="post" role="form" class="gb-form" id="form" hx-post="/guestbook" hx-target="#entries"
 			  hx-swap="beforeend" _="on entryAdded me.reset()" th:action="@{/guestbook}" th:object="${form}">
 			<div class="form-group">
 				<label for="name" th:text="#{guestbook.form.name}">Name</label><br /> 
