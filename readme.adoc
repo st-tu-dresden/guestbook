@@ -19,8 +19,7 @@ You might need to click on the __Open in browser__ button besides the URL in the
 
 === Local machine
 
-NOTE: Working on your local machine requires Java 21, and a recent Git (2.21 or better preferred) to be available on
-your machine.
+NOTE: Working on your local machine requires Java 21, and a recent Git (2.51 or better preferred) to be available on your machine.
 If you miss any of those go through the steps described in <<Prerequisites>>.
 Also, note that you have to run `mvnw.cmd` instead of `./mvnw` if you run Windows by accident.
 
@@ -28,7 +27,6 @@ Also, note that you have to run `mvnw.cmd` instead of `./mvnw` if you run Window
 ----
 $ git clone https://github.com/st-tu-dresden/guestbook
 $ cd guestbook
-$ ./mvnw clean package
 $ ./mvnw spring-boot:run
 ----
 
