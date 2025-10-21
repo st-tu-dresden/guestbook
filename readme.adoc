@@ -44,10 +44,10 @@ Make sure the console shows something like this:
 
 [source, bash]
 ----
-$ java -version
-openjdk version "21.0.3" 2024-04-16 LTS
-OpenJDK Runtime Environment Temurin-21.0.3+9 (build 21.0.3+9-LTS)
-OpenJDK 64-Bit Server VM Temurin-21.0.3+9 (build 21.0.3+9-LTS, mixed mode, sharing)
+$ java --version
+openjdk 21.0.8 2025-07-15 LTS
+OpenJDK Runtime Environment Temurin-21.0.8+9 (build 21.0.8+9-LTS)
+OpenJDK 64-Bit Server VM Temurin-21.0.8+9 (build 21.0.8+9-LTS, mixed mode, sharing)
 
 ----
 
@@ -57,11 +57,11 @@ Make sure that the wrapped Maven picks up the same JDK version and that the foll
 [source, bash]
 ----
 $ .\mvnw.cmd --version
-Apache Maven 3.8.6 (84538c9988a25aec085021c365c560670ad80f63)
-Maven home: C:\Users\USER\.m2\wrapper\dists\apache-maven-3.8.6-bin\67568434\apache-maven-3.8.6
-Java version: 21.0.3, vendor: Eclipse Adoptium, runtime: C:\PATH\TO\JDK\jdk-21.0.3.9-hotspot
-Default locale: de_DE, platform encoding: UTF-8
-OS name: "windows 11", version: "10.0", arch: "amd64", family: "windows"
+Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)
+Maven home: /Users/odrotbohm/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15
+Java version: 21.0.8, vendor: Eclipse Adoptium, runtime: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
+Default locale: en_US, platform encoding: UTF-8
+OS name: "mac os x", version: "15.6.1", arch: "aarch64", family: "mac"
 ----
 
 === Git
@@ -71,7 +71,7 @@ https://git-scm.com/download[Download] the binaries, run the installer. Verify t
 [source, bash]
 ----
 $ git --version
-git version 2.33.0
+git version 2.51.1
 ----
 
 == IDE Setup
