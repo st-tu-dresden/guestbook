@@ -16,16 +16,15 @@
 package guestbook;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.CoreMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 /**
  * Integration tests for {@link GuestbookController}.
@@ -34,9 +33,9 @@ import org.springframework.test.web.servlet.MockMvc;
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-public class GuestbookControllerIntegrationTests {
+class GuestbookControllerIntegrationTests {
 
-	@Autowired MockMvc mvc;
+	@Autowired MockMvcTester mvc;
 	@Autowired GuestbookRepository repository;
 
 	@Test // #58
@@ -44,9 +43,9 @@ public class GuestbookControllerIntegrationTests {
 
 		GuestbookEntry entry = repository.findAll().iterator().next();
 
-		mvc.perform(delete("/guestbook/{id}", entry.getId())) //
-				.andExpect(status().is3xxRedirection()) //
-				.andExpect(header().string("Location", endsWith("/login")));
+		assertThat(mvc.perform(delete("/guestbook/{id}", entry.getId())))
+				.hasStatus3xxRedirection()
+				.hasHeader(HttpHeaders.LOCATION, "http://localhost/login");
 	}
 
 	@Test // #58
@@ -56,9 +55,9 @@ public class GuestbookControllerIntegrationTests {
 		long numberOfEntries = repository.count();
 		GuestbookEntry entry = repository.findAll().iterator().next();
 
-		mvc.perform(delete("/guestbook/{id}", entry.getId())) //
-				.andExpect(status().is3xxRedirection()) //
-				.andExpect(view().name("redirect:/guestbook"));
+		assertThat(mvc.perform(delete("/guestbook/{id}", entry.getId())))
+				.hasStatus3xxRedirection()
+				.hasViewName("redirect:/guestbook");
 
 		assertThat(repository.count()).isEqualTo(numberOfEntries - 1);
 	}

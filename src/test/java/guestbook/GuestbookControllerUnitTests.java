@@ -24,7 +24,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.util.Streamable;
 import org.springframework.ui.ExtendedModelMap;
-import org.springframework.ui.Model;
 
 /**
  * Unit tests for {@link GuestbookController}.
@@ -39,13 +38,13 @@ class GuestbookControllerUnitTests {
 	@Test
 	void populatesModelForGuestbook() {
 
-		GuestbookEntry entry = new GuestbookEntry("Yoda", "May the 4th b with you!");
+		var entry = new GuestbookEntry("Yoda", "May the 4th b with you!");
 		doReturn(Streamable.of(entry)).when(guestbook).findAll();
 
-		Model model = new ExtendedModelMap();
+		var model = new ExtendedModelMap();
 
-		GuestbookController controller = new GuestbookController(guestbook);
-		String viewName = controller.guestBook(model, new GuestbookForm(null, null));
+		var controller = new GuestbookController(guestbook);
+		var viewName = controller.guestBook(model, new GuestbookForm(null, null));
 
 		assertThat(viewName).isEqualTo("guestbook");
 		assertThat(model.asMap().get("entries")).isInstanceOf(Iterable.class);
