@@ -124,6 +124,9 @@
 	</dependencies>
 
 	<build>
+
+		<defaultGoal>verify</defaultGoal>
+
 		<plugins>
 
 			<plugin>
