@@ -15,8 +15,8 @@
  */
 package guestbook;
 
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
-import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxTrigger;
 import jakarta.validation.Valid;
 
 import java.util.Optional;
@@ -145,12 +145,18 @@ class GuestbookController {
 	 * @see #addEntry(GuestbookForm, Errors, Model)
 	 */
 	@HxRequest
-	@HxTrigger("eventAdded")
 	@PostMapping(path = "/guestbook")
-	View addEntry(@Valid GuestbookForm form, Model model) {
+	View addEntryHtmx(@Valid @ModelAttribute("form") GuestbookForm form, Errors errors, Model model,
+			HtmxResponse response) {
+
+		if (errors.hasErrors()) {
+			return FragmentsRendering.with("guestbook :: form").build();
+		}
 
 		model.addAttribute("entry", guestbook.save(form.toNewEntry()));
 		model.addAttribute("index", guestbook.count());
+
+		response.addTrigger("entryAdded");
 
 		return FragmentsRendering.with("guestbook :: entry").build();
 	}

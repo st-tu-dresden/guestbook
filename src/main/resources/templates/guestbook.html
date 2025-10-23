@@ -45,7 +45,8 @@
 		</div>
 
 		<form method="post" role="form" class="gb-form" id="form" hx-post="/guestbook" hx-target="#entries"
-			  hx-swap="beforeend" _="on entryAdded me.reset()" th:action="@{/guestbook}" th:object="${form}">
+			  hx-swap="beforeend" _="on eventAdded me.reset()" th:action="@{/guestbook}" th:object="${form}"
+			  th:fragment="form" hx-swap-oob="true">
 			<div class="form-group">
 				<label th:for="${#ids.next('name')}" th:text="#{guestbook.form.name}">Name</label><br />
 				<input class="form-control" type="text" th:field="*{name}" th:errorclass="is-invalid" required="required" />
