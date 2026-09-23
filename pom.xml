@@ -100,6 +100,14 @@
 		</dependency>
 
 
+		<!-- Selenium / Selenide -->
+
+		<dependency>
+			<groupId>com.codeborne</groupId>
+			<artifactId>selenide</artifactId>
+			<version>7.18.1</version>
+		</dependency>
+
 		<!-- JavaScript libraries -->
 
 		<dependency>
