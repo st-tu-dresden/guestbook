@@ -93,13 +93,21 @@
             <scope>test</scope>
         </dependency>
 
-		<!-- Javascript libraries -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
 
+
+
+        <!-- Selenium / Selenide-->
+
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>7.18.1</version>
+        </dependency>
 
 		<!-- JavaScript libraries -->
 
