@@ -1,8 +1,11 @@
 = A Sample Java Web-Application
 :experimental:
 
-image:https://github.com/st-tu-dresden/guestbook/workflows/Build%20Maven%20artifacts/badge.svg["Build Status", link="https://github.com/st-tu-dresden/guestbook/actions?query=workflow%3A%22Build+Maven+artifacts%22"]
-image:https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod["Gitpod ready-to-code", link="https://gitpod.io/#https://github.com/st-tu-dresden/guestbook"]
+image:https://github.com/st-tu-dresden/guestbook/workflows/Build%20Maven%20artifacts/badge.svg["Build Status",link="https://github.com/st-tu-dresden/guestbook/actions?query=workflow%3A%22Build+Maven+artifacts%22"]
+image:https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod["Gitpod ready-to-code",link="https://gitpod.io/#https://github.com/st-tu-dresden/guestbook"]
+image:https://img.shields.io/badge/Java-25-blue?logo=java["Java 25",link="https://adoptium.net/temurin/releases/?version=25"]
+image:https://img.shields.io/badge/Spring%20Boot-4.1.1-blue?logo=springboot["Spring Boot 4.1.1",link="https://spring
+.io/projects/spring-boot"]
 
 Purpose of this sample project is to make students familiar with basic technologies they're going to use during the Software Engineering Lab at Technical University of Dresden.
 
@@ -14,12 +17,12 @@ http://gitpod.io/[GitPod] is a cloud IDE that allows you to work with a project 
 
 1. Click https://gitpod.io/#https://github.com/st-tu-dresden/guestbook[this link] to open the project in GitPod.
 2. Wait for the build to finish (see progress in the console view).
-3. Once the website opens in the embedded preview browser, the project is ready to be worked with. 
-You might need to click on the __Open in browser__ button besides the URL in the embededed preview browser.
+3. Once the website opens in the embedded preview browser, the project is ready to be worked with.
+You might need to click on the __Open in browser__ button besides the URL in the embedded preview browser.
 
 === Local machine
 
-NOTE: Working on your local machine requires Java 21, and a recent Git (2.51 or better preferred) to be available on your machine.
+NOTE: Working on your local machine requires Java 25, and a recent Git (2.51 or better preferred) to be available on your machine.
 If you miss any of those go through the steps described in <<Prerequisites>>.
 Also, note that you have to run `mvnw.cmd` instead of `./mvnw` if you run Windows by accident.
 
@@ -35,38 +38,38 @@ Note that Spring Boot creates a default user `user` with a random password print
 
 == Prerequisites
 
-=== Java 21
+=== Java 25
 
-https://adoptium.net/temurin/releases/?version=21[Download] the binaries, install.
+https://adoptium.net/temurin/releases/?version=25[Download] the binaries, install.
 Make sure the console shows something like this:
 
-[source, bash]
+[source, shell]
 ----
 $ java --version
-openjdk 21.0.8 2025-07-15 LTS
-OpenJDK Runtime Environment Temurin-21.0.8+9 (build 21.0.8+9-LTS)
-OpenJDK 64-Bit Server VM Temurin-21.0.8+9 (build 21.0.8+9-LTS, mixed mode, sharing)
+openjdk version "25.0.3" 2026-04-21 LTS
+OpenJDK Runtime Environment Temurin-25.0.3+9 (build 25.0.3+9-LTS)
+OpenJDK 64-Bit Server VM Temurin-25.0.3+9 (build 25.0.3+9-LTS, mixed mode, sharing)
 
 ----
 
-Make sure that the wrapped Maven picks up the same JDK version and that the following command shows similar output
-(Windows Example):
+Make sure that the wrapped Maven picks up the same JDK version and that the following command shows similar output (Windows Example):
 
-[source, bash]
+[source, shell]
 ----
 $ .\mvnw.cmd --version
 Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)
 Maven home: /Users/odrotbohm/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15
-Java version: 21.0.8, vendor: Eclipse Adoptium, runtime: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
+Java version: 25.0.3, vendor: Eclipse Adoptium, runtime: /Library/Java/JavaVirtualMachines/temurin-25.jdk/Contents/Home
 Default locale: en_US, platform encoding: UTF-8
 OS name: "mac os x", version: "15.6.1", arch: "aarch64", family: "mac"
 ----
 
 === Git
 
-https://git-scm.com/download[Download] the binaries, run the installer. Verify the command line shows something like this after install:
+https://git-scm.com/download[Download] the binaries, run the installer.
+Verify the command line shows something like this after install:
 
-[source, bash]
+[source, shell]
 ----
 $ git --version
 git version 2.51.1
@@ -78,7 +81,8 @@ git version 2.51.1
 
 Grab the latest https://spring.io/tools[Spring Tool Suite] (plain Eclipse should work as well), run installer or unzip and run it.
 
-Select menu:File[Import], select menu:Maven[Existing Maven Projects], select the folder you checked the project out into and hit btn:[Finish]. This will import the project into your workspace.
+Select menu:File[Import], select menu:Maven[Existing Maven Projects], select the folder you checked the project out into and hit btn:[Finish].
+This will import the project into your workspace.
 
 In the Console view you might wanna click the btn:[Open Console] button and select Maven Console to see that Maven is downloading dependencies, sources and Javadocs.
 
@@ -87,14 +91,18 @@ In the Console view you might wanna click the btn:[Open Console] button and sele
 Grab the latest https://www.jetbrains.com/idea/download/[IntelliJ IDEA IDE] (both Community Edition and Ultimate Edition will work), install it according to the instructions on their website and run it.
 
 === Open from local disk
-From the Welcome Screen, select btn:[Open]. Otherwise, if you've already opened another project, you'll need to select menu:File[Open…].
+
+From the Welcome Screen, select btn:[Open].
+Otherwise, if you've already opened another project, you'll need to select menu:File[Open…].
 Now, navigate to the folder you checked the project out into (it should contain `pom.xml`), select it and hit btn:[Open].
 When asked whether to trust and open the Maven project, proceed with btn:[Trust Project].
 
 === Open from VCS
-If you want to clone the project from GitHub, you can do so directly from IntelliJ IDEA. T
-From the Welcome Screen, select btn:[Get from VCS]. Otherwise, if you've already opened another project, you'll need to select menu:File[New​][Project from Version Control…​].
-Paste the URL `https://github.com/st-tu-dresden/guestbook' into the URL field, select a directory to clone the project into and hit btn:[Clone].
+
+If you want to clone the project from GitHub, you can do so directly from IntelliJ IDEA.
+From the Welcome Screen, select btn:[Get from VCS].
+Otherwise, if you've already opened another project, you'll need to select menu:File[New​][Project from Version Control…​].
+Paste the URL `https://github.com/st-tu-dresden/guestbook` into the URL field, select a directory to clone the project into and hit btn:[Clone].
 When asked whether to open the project, proceed with btn:[Yes].
 
 Now you have to wait a bit while IntelliJ and Maven work on importing the project, which includes downloading all required dependencies from the internet.
@@ -147,4 +155,95 @@ Library to build dynamic web applications using HTML and JavaScript (AJAX).
 - https://htmx.org[Overview]
 - https://htmx.org/docs[Tutorial-Documentation]
 - Special Thymeleaf dialect to integrate HTMX:
-https://github.com/wimdeblauwe/htmx-spring-boot[Github]
+https://github.com/wimdeblauwe/htmx-spring-boot[GitHub]
+
+=== Selenium and Selenide
+
+Library to build automated tests for web applications.
+It opens a browser and simulates user interaction with the application.
+
+- https://www.selenium.dev/documentation/webdriver/[Selenium WebDriver]
+- https://selenide.org/[Selenide]
+
+== Tests
+
+The Project covers basic testing of different layers of the application.
+The tests are located in `src/test/java` and can be run using the Maven wrapper:
+
+[source, shell]
+----
+$ ./mvnw test
+----
+
+The project covers the following types of tests:
+
+- Unit tests for the controller, entities and repositories
+- Integration tests for the web layer
+- Security tests for the web layer
+- End-User tests for the web layer (Selenide)
+
+It use some additional libraries to support testing:
+
+- JUnit as general test framework
+- AssertJ for fluent assertions
+- Mockito for mocking objects
+
+=== Unit tests
+
+The majority of tests are unit tests.
+You have to distinguish between three types of unit tests:
+
+==== Entity tests
+
+Entity tests are located in `GuestbookEntryTests.java`.
+It tests the `GuestbookEntry` by checking the allowed values for the constructor.
+
+==== Repository tests
+
+Repository tests are located in `GuestbookEntryRepositoryIntegrationTests.java`.
+It only tests the repository layer and uses an in-memory database to test the repository methods.
+The 'Transactional' annotation is used to roll back the database after each test.
+You can use the `@DataJpaTest` annotation instead to only load the repository layer and not the whole application context.
+This requires that you fill the database with some test data before running the tests.
+
+All you test are your own repository methods, not the ones provided by Spring Data JPA.
+
+==== Controller tests
+
+The Controller tests are located in `GuestbookControllerUnitTests.java`.
+They use a Mock-Objekt of the repository to test the controller methods.
+So all you test is the controller logic, not the repository logic.
+And all what the controller does is to call the repository methods and return the result to the view which can be accessed by `ExtendedModelMap`.
+
+=== Integration tests
+
+Integration tests are tests that test a unit of the application in combination with other units.
+Manly when the Spring context is loaded and the application is started.
+So you can see the repository-tests as integration tests as well.
+
+The main Integration tests are located in `GuestbookControllerIntegrationTests.java`.
+There you call the controller methods and check the result of the view and the model attributes.
+This is done by Mocking the HTTP request and response and checking the result of the controller method.
+This will be done by using the `MockMvcTester` class of Spring Test.
+
+=== Security tests
+
+Security tests are located in `GuestbookControllerIntegrationTests.java`.
+They check if the application is secured and that only authorized users can access the application.
+This use the Spring Security Test library and specifically the `@WithMockUser` annotation to simulate a user with a specific role.
+
+=== End-User tests
+
+End-User tests simulate "real" user interaction with the application.
+So every test represents a Use-Case of the application.
+All tests are located in `GuestbookUITests.java`.
+They use the Selenide library to open a browser and simulate user interaction with the application.
+There are some additions that are **optional**:
+
+- A red Cursor to show where the 'mouse' is located.
+- A delay between every action to make it easier to follow the test execution.
+
+== License
+
+This project is licensed under the Apache License, Version 2.0.
+See the https://www.apache.org/licenses/LICENSE-2.0.txt[Apache 2.0-License] for details.
