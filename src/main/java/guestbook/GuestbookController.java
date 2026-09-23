@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2025 the original author or authors.
+ * Copyright 2014-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -150,7 +150,7 @@ class GuestbookController {
 			HtmxResponse response) {
 
 		if (errors.hasErrors()) {
-			return FragmentsRendering.with("guestbook :: form").build();
+			return FragmentsRendering.fragment("guestbook :: form").build();
 		}
 
 		model.addAttribute("entry", guestbook.save(form.toNewEntry()));
@@ -158,7 +158,7 @@ class GuestbookController {
 
 		response.addTrigger("entryAdded");
 
-		return FragmentsRendering.with("guestbook :: entry").build();
+		return FragmentsRendering.fragment("guestbook :: entry").build();
 	}
 
 	/**
@@ -180,7 +180,7 @@ class GuestbookController {
 
 			model.addAttribute("entries", guestbook.findAll());
 
-			return FragmentsRendering.with("guestbook :: entries").build();
+			return FragmentsRendering.fragment("guestbook :: entries").build();
 
 		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}

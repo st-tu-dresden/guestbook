@@ -39,7 +39,7 @@ class GuestbookControllerIntegrationTests {
 	@Autowired GuestbookRepository repository;
 
 	@Test // #58
-	void redirectsToLoginPageForSecuredResource() throws Exception {
+	void redirectsToLoginPageForSecuredResource() {
 
 		GuestbookEntry entry = repository.findAll().iterator().next();
 
