@@ -16,6 +16,7 @@
 package guestbook;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
@@ -30,6 +33,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
  * Integration tests for {@link GuestbookController}.
  *
  * @author Oliver Drotbohm
+ * @author Oliver Geisel
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -50,7 +54,7 @@ class GuestbookControllerIntegrationTests {
 
 	@Test // #58
 	@WithMockUser(roles = "ADMIN")
-	void returnsModelAndViewForSecuredUriAfterAuthentication() throws Exception {
+	void allowsDeletingEntryForAdmin()  {
 
 		long numberOfEntries = repository.count();
 		GuestbookEntry entry = repository.findAll().iterator().next();
@@ -60,5 +64,53 @@ class GuestbookControllerIntegrationTests {
 		.hasRedirectedUrl("/guestbook");
 
 		assertThat(repository.count()).isEqualTo(numberOfEntries - 1);
+	}
+
+	@Test
+	void deleteNotExistingEntryReturnsNotFound()  {
+		assertThat(mvc.perform(delete("/guestbook/{id}", 9999L)
+						.with(user("admin").roles("ADMIN")) // Alternative to @WithMockUser(roles = "ADMIN")
+				)
+		).hasStatus(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	@WithAnonymousUser
+	void returnsToMainLoginWhenNotAuthorized() {
+
+		long numberOfEntries = repository.count();
+		GuestbookEntry entry = repository.findAll().iterator().next();
+
+		assertThat(mvc.perform(delete("/guestbook/{id}", entry.getId())))
+				.hasStatus3xxRedirection()
+				.hasRedirectedUrl("/login");
+
+		// no changes in the repository, because the entry was not deleted
+		assertThat(repository.count()).isEqualTo(numberOfEntries);
+	}
+
+
+	@Test
+	void everyoneCanCreateEntry()  {
+
+		long numberOfEntries = repository.count();
+
+		assertThat(mvc.perform(post("/guestbook")
+						.param("text", "Test Message")
+						.param("name", "Test Name")
+				)
+		)// All 3 assertions check if a redirect happens, but every assertion checks a different aspect of the redirect
+		 .hasStatus3xxRedirection()
+		 .hasRedirectedUrl("/guestbook")
+		 .hasViewName("redirect:/guestbook");
+
+		assertThat(repository.count()).isEqualTo(numberOfEntries + 1);
+	}
+
+	@Test
+	void accessToEntryIsForbidden() {
+		assertThat(mvc.perform(get("/guestbook/1")))
+
+				.hasStatus(HttpStatus.METHOD_NOT_ALLOWED); // Only Delete is allowed, so GET should return 405
 	}
 }
