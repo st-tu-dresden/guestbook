@@ -1,4 +1,4 @@
-image: gitpod/workspace-java-17
+image: gitpod/workspace-java-25
 ports:
   - port: 8080
     onOpen: open-preview
