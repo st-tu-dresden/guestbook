@@ -147,7 +147,7 @@ class GuestbookUITests {
 	@Test
 	void countNumberOfEntries() {
 		// Use $$()-Method to find ALL elements with the given CSS selector or other criteria
-		int numberOfEntries = $$(".card").size();
+		int numberOfEntries = $$(".entry").size();
 		assertEquals(4, numberOfEntries, "There should be 4 entries in the guestbook initially.");
 	}
 
@@ -161,7 +161,7 @@ class GuestbookUITests {
 		// Fill in the form fields and submit the form
 		SelenideElement nameInput = $("#name");
 		SelenideElement textInput = $("#text");
-		WebElement button = $("input[type='submit']").scrollTo();
+		WebElement button = $("#form [type='submit']").scrollTo();
 		// SelenideElement is a subclass of WebElement.
 		// scrollTo() is a Selenide method to scroll the element into view before clicking it.
 
@@ -172,11 +172,11 @@ class GuestbookUITests {
 		// Verify that the new entry appears in the guestbook
 		SelenideElement entriesDiv = $("#entries");
 		ElementsCollection allEntries = entriesDiv.$$(
-				By.cssSelector(".card")); // You can call $ and $$ on SelenideElement to find child elements
+				By.className("entry")); // You can call $ and $$ on SelenideElement to find child elements
 		SelenideElement lastEntry = allEntries.last();
 
 		// Validation via build-in Selenide methods; criteria use By for better readability.
-		lastEntry.$(By.className("card-body")).shouldHave(text("The cake is a lie."));
+		lastEntry.$(By.className("entry-text")).shouldHave(text("The cake is a lie."));
 	}
 
 
@@ -193,7 +193,7 @@ class GuestbookUITests {
 	@Test
 	void testDeleteEntry() {
 		// Got to the login page and login as admin
-		$("div.text-center").$("a").click();
+		$("a[href='/login']").click();
 		// check current URL to be sure we are on the login page
 		String currentUrl = WebDriverRunner.url();
 		assertEquals("http://localhost:" + port + "/login", currentUrl, "The current URL should be the login page.");
@@ -216,7 +216,7 @@ class GuestbookUITests {
 		firstDeleteButton.shouldNot(exist);
 
 		// Verify that the entry has been deleted by checking the number of entries
-		int numberOfEntriesAfterDeletion = $$(".card").size();
+		int numberOfEntriesAfterDeletion = $$(".entry").size();
 		assertEquals(3, numberOfEntriesAfterDeletion, "There should be 3 entries in the guestbook after deletion.");
 	}
 

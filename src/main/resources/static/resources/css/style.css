@@ -1,28 +1,21 @@
-div#entries, #form {
-	margin: auto;
-	width: 50%;
-}
-
-.card {
-	margin-bottom: 2em;
+.gb-container {
+	max-width: 48rem;
 }
 
 .card-title {
-	margin-bottom: 0;
-}
-
-.entry-text { /* This is the class for the text/entry someone wrote. Customize this to your liking. */
-	margin-top: 0;
+	margin-bottom: 0.125rem;
 }
 
 .date {
-	font-size: 0.8em;
+	font-size: 0.875em;
 }
 
-blockquote {
+.entry-text { /* This is the class for the text/entry someone wrote. Customize this to your liking. */
 	margin: 0;
+	white-space: pre-line;
 }
 
-form#form {
-	padding: 0 1.25em;
+/* The empty state only shows while there are no entries, also after HTMX removed or added some. */
+#entries:has(.entry) .gb-empty {
+	display: none;
 }

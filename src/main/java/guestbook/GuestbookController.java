@@ -150,7 +150,7 @@ class GuestbookController {
 			HtmxResponse response) {
 
 		if (errors.hasErrors()) {
-			return FragmentsRendering.fragment("guestbook :: form").build();
+			return FragmentsRendering.fragment("guestbook :: entry-form").build();
 		}
 
 		model.addAttribute("entry", guestbook.save(form.toNewEntry()));

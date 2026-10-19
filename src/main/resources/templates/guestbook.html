@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<script th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
 		<script th:src="@{/webjars/hyperscript.org/dist/_hyperscript.min.js}"></script>
 		<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css" />
@@ -11,54 +12,73 @@
 		<title th:text="#{guestbook.title}">Gästebuch</title>
 	</head>
 	<body>
-		<h1 class="text-center" th:text="#{guestbook.title}">Gästebuch</h1>
 
-		<div class="text-center">
-			<a sec:authorize="isAnonymous()" href="/login">Login</a>
-			<a sec:authorize="isAuthenticated()" href="/logout">Logout</a>
-		</div>
-
-		<br />
-
-		<div id="entries" class="mx-auto">			
-			<div th:each="entry, it : ${entries}" th:with="index = ${it.count}" th:fragment="entries">
-				<div class="card" th:fragment="entry" th:id="entry+${entry.id}">
-					<div class="card-header">
-						<form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/guestbook/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
-							<button th:title="#{guestbook.form.delete}" class="btn btn-sm float-end"
-							        th:hx-delete="@{/guestbook/{id}(id=${entry.id})}" hx-target="#entries">
-									<!-- the ':' is necessary, when Thymeleaf expression is used
-									this dialect is enabled by htmx-spring-boot-thymeleaf dependency in pom-->
-								<span class="fas fa-times"></span>
-							</button>
-						</form>
-						<h4 th:text="${index} + '. ' + ${entry.name}" class="card-title">1. Posting</h4>
-					</div>
-					<div class="card-body">
-						<blockquote class="entry-text" th:text="${entry.text}"></blockquote>
-					</div>
-					<div class="card-footer">
-						<footer class="date" th:text="${#temporals.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
-					</div>
+		<!-- The page works without JavaScript: plain links and forms, enhanced by HTMX if it is available. -->
+		<nav class="navbar bg-body-tertiary border-bottom mb-4">
+			<div class="container gb-container">
+				<h1 class="navbar-brand mb-0">
+					<span class="fas fa-book-open me-2 text-primary"></span><span th:text="#{guestbook.title}">Gästebuch</span>
+				</h1>
+				<div>
+					<a sec:authorize="isAnonymous()" href="/login" class="btn btn-outline-secondary btn-sm">
+						<span class="fas fa-right-to-bracket me-1"></span>Login
+					</a>
+					<a sec:authorize="isAuthenticated()" href="/logout" class="btn btn-outline-secondary btn-sm">
+						<span class="fas fa-right-from-bracket me-1"></span>Logout
+					</a>
 				</div>
 			</div>
-		</div>
+		</nav>
 
-		<form method="post" role="form" class="gb-form" id="form" hx-post="/guestbook" hx-target="#entries"
-			  hx-swap="beforeend" _="on eventAdded me.reset()" th:action="@{/guestbook}" th:object="${form}"
-			  th:fragment="form" hx-swap-oob="true">
-			<div class="form-group">
-				<label th:for="${#ids.next('name')}" th:text="#{guestbook.form.name}">Name</label><br />
-				<input class="form-control" type="text" th:field="*{name}" th:errorclass="is-invalid" required="required" />
-				<div th:if="${#fields.hasErrors('name')}" class="invalid-feedback" th:text="#{guestbook.form.name.required}">Please provide a name.</div> 
+		<main class="container gb-container pb-5">
+
+			<div id="entries">
+				<!-- Hidden via CSS as soon as there's at least one entry, so that it also disappears when HTMX adds one. -->
+				<p class="gb-empty text-body-secondary text-center py-4" th:text="#{guestbook.empty}">Noch keine Einträge.</p>
+				<div th:each="entry, it : ${entries}" th:with="index = ${it.count}" th:fragment="entries">
+					<article class="entry card shadow-sm mb-3" th:fragment="entry" th:id="entry+${entry.id}">
+						<div class="card-header d-flex align-items-start gap-3">
+							<div class="flex-grow-1">
+								<h2 th:text="${index} + '. ' + ${entry.name}" class="card-title h5">1. Posting</h2>
+								<time class="date text-body-secondary" th:datetime="${entry.date}"
+									  th:text="${#temporals.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</time>
+							</div>
+							<!-- A real form, so that deleting also works without JavaScript. HTMX takes over if available. -->
+							<form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/guestbook/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
+								<!-- th:hx-delete is processed by the dialect of the htmx-spring-boot-thymeleaf dependency in the pom -->
+								<button type="submit" th:title="#{guestbook.form.delete}" class="btn btn-sm btn-outline-danger"
+										th:hx-delete="@{/guestbook/{id}(id=${entry.id})}" hx-target="#entries">
+									<span class="fas fa-trash-can" aria-hidden="true"></span>
+									<span class="visually-hidden" th:text="#{guestbook.form.delete}">Eintrag löschen</span>
+								</button>
+							</form>
+						</div>
+						<div class="card-body">
+							<blockquote class="entry-text" th:text="${entry.text}"></blockquote>
+						</div>
+					</article>
+				</div>
 			</div>
-			<div class="form-group">
-				<label th:for="${#ids.next('text')}" th:text="#{guestbook.form.text}">Text</label><br />
-				<textarea th:field="*{text}" th:errorclass="is-invalid" class="form-control" required="required"></textarea>
-				<div th:if="${#fields.hasErrors('text')}" class="invalid-feedback" th:text="#{guestbook.form.text.required}">Please provide a text.</div>
-			</div>
-			<input type="submit" class="btn btn-secondary" th:value="#{guestbook.form.submit}" value="Senden" />
-		</form>
+
+			<!-- Fragment names must not be HTML element names: "guestbook :: form" would also select every <form>. -->
+			<form method="post" role="form" class="border rounded-3 bg-body-tertiary p-4 mt-4" id="form" hx-post="/guestbook" hx-target="#entries"
+				  hx-swap="beforeend" _="on entryAdded from body me.reset()" th:action="@{/guestbook}" th:object="${form}"
+				  th:fragment="entry-form" hx-swap-oob="true">
+				<h2 class="h5 mb-3" th:text="#{guestbook.form.title}">Eintrag hinzufügen</h2>
+				<div class="mb-3">
+					<label for="name" class="form-label" th:text="#{guestbook.form.name}">Name</label>
+					<input class="form-control" type="text" th:field="*{name}" th:errorclass="is-invalid" required="required" />
+					<div th:if="${#fields.hasErrors('name')}" class="invalid-feedback" th:text="#{guestbook.form.name.required}">Please provide a name.</div>
+				</div>
+				<div class="mb-3">
+					<label for="text" class="form-label" th:text="#{guestbook.form.text}">Text</label>
+					<textarea th:field="*{text}" th:errorclass="is-invalid" class="form-control" rows="4" required="required"></textarea>
+					<div th:if="${#fields.hasErrors('text')}" class="invalid-feedback" th:text="#{guestbook.form.text.required}">Please provide a text.</div>
+				</div>
+				<input type="submit" class="btn btn-primary" th:value="#{guestbook.form.submit}" value="Senden" />
+			</form>
+
+		</main>
 
 	</body>
 </html>
